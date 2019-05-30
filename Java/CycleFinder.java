@@ -35,7 +35,7 @@ public class CycleFinder {
 	
 	public static void main(String[] args) throws IOException {
 		/** INPUT **/
-		BufferedReader br = new BufferedReader(new FileReader("./Big_East/matrices/binaryMatrix1998.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("../data_files/Big_East/matrices/binaryMatrix1996.txt"));
 		PrintWriter pw1 = new PrintWriter(new BufferedWriter(new FileWriter("results/outCycles.txt")));
 		PrintWriter pw2 = new PrintWriter(new BufferedWriter(new FileWriter("results/histogram.txt")));
 		StringTokenizer st = new StringTokenizer(br.readLine());

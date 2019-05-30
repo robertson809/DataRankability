@@ -1,0 +1,10 @@
+   1, Chattanooga
+   2, Citadel
+   3, ETSU
+   4, Furman
+   5, Mercer
+   6, Samford
+   7, UNC_Greensboro
+   8, VMI
+   9, W_Carolina
+  10, Wofford
