@@ -1,0 +1,170 @@
+% document class and packages
+\documentclass{beamer}
+\usepackage{algorithm,algorithmic}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+% new commands and operators
+\DeclareMathOperator{\md}{md}
+\DeclareMathOperator{\sv}{sv}
+\DeclareMathOperator{\hd}{hd}
+\newcommand\abs[1]{\left|#1\right|}
+
+\newtheorem{proposition}[theorem]{Proposition}
+
+% remove figure caption prefix
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+% hyperlinks setup
+\hypersetup{colorlinks,breaklinks,
+	urlcolor=[rgb]{0,0.75,1},
+	linkcolor=[rgb]{0.75,0.75,0.75}}
+
+% empty navigation symbols
+\beamertemplatenavigationsymbolsempty
+
+% remove navigation dots on miniframes
+\makeatletter
+\def\beamer@writeslidentry{\clearpage\beamer@notesactions}
+\makeatother
+
+% Use Theme
+\usetheme{Warsaw}
+\useoutertheme[footline=authortitle]{miniframes}
+\useinnertheme[shadow=true]{rounded}
+
+% Colors
+\definecolor{primary}{RGB}{0, 0, 0} % (primary, black)
+\definecolor{secondary}{RGB}{102, 178, 255} % (secondary, light blue)
+\definecolor{text}{RGB}{190,190,190} % (text, light silver)
+
+% Beamer Colors
+\setbeamercolor{palette primary}{bg=primary,fg=text}
+\setbeamercolor{palette secondary}{bg=secondary,fg=text}
+\setbeamercolor{palette tertiary}{bg=primary,fg=text}
+\setbeamercolor{structure}{fg=primary} % itemize, enumerate, etc
+\setbeamercolor{frametitle}{fg=primary}
+
+% Transparency for itemized listing
+%\setbeamercovered{transparent}
+
+% Title Page
+\title{Improving Spectral Rankability}
+\author{Thomas R. Cameron}
+\institute{Davidson College}
+\date{\today}
+
+\begin{document}
+% Title Frame
+\begin{frame}
+	\titlepage
+\end{frame}
+
+% Outline
+%\AtBeginSection[]{
+ %\frame<beamer>{
+  %\frametitle{Outline}   
+  %\tableofcontents[currentsection]
+ %}
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Questions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Questions}
+
+\begin{frame}{Whats the difference?}
+\centering
+\begin{tabular}{cc}
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](1) to [out=0,in=180,looseness=0](4);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture}
+&
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](3) to [out=45,in=225,looseness=0](4);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture} \\
+$\sigma(\Delta) = \{3,1,0,2,1,0\}$ & $\sigma(\Delta)=\{2,1,1,2,1,0\}$ \\
+$\text{rank}(A) = 0.4$ & $\text{rank}(A) = 0.6$
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Another Example}
+\centering
+\begin{tabular}{cc}
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](2) to [out=45,in=225,looseness=0](4);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture}
+&
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture} \\
+$\sigma(\Delta) = \{2,2,0,2,1,0\}$ & $\sigma(\Delta)=\{2,1,0,2,1,0\}$ \\
+$\text{rank}(A) = 0.6$ & $\text{rank}(A) = 0.6$
+\end{tabular}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								References 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}[allowframebreaks]{References}
+%\bibliographystyle{amsalpha}
+%\bibliography{../Bibliography}
+%\end{frame}
+
+\end{document}

@@ -1,0 +1,264 @@
+% document class and packages
+\documentclass{beamer}
+\usepackage{algorithm,algorithmic}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color, colortbl}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{tikz}
+
+\newlength\myindent
+\setlength\myindent{1em}
+\newcommand\bindent{%
+  \begingroup
+  \setlength{\itemindent}{\myindent}
+  \addtolength{\algorithmicindent}{\myindent}
+}
+\newcommand\eindent{\endgroup}
+
+% new commands and operators
+\DeclareMathOperator{\md}{md}
+\DeclareMathOperator{\sv}{sv}
+\DeclareMathOperator{\hd}{hd}
+\newcommand\abs[1]{\left|#1\right|}
+\newcommand\norm[1]{\left\Vert#1\right\Vert}
+\newcommand{\iu}{{i\mkern1mu}}
+
+\newtheorem{proposition}[theorem]{Proposition}
+
+% remove figure caption prefix
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+% hyperlinks setup
+\hypersetup{colorlinks,breaklinks,
+	urlcolor=[rgb]{0,0.75,1},
+	linkcolor=[rgb]{0.75,0.75,0.75}}
+
+% empty navigation symbols
+\beamertemplatenavigationsymbolsempty
+
+% remove navigation dots on miniframes
+\makeatletter
+\def\beamer@writeslidentry{\clearpage\beamer@notesactions}
+\makeatother
+
+% Use Theme
+\usetheme{Warsaw}
+\useoutertheme[footline=authortitle]{miniframes}
+\useinnertheme[shadow=true]{rounded}
+
+% Colors
+\definecolor{primary}{RGB}{0, 0, 0} % (primary, black)
+\definecolor{secondary}{RGB}{102, 178, 255} % (secondary, light blue)
+\definecolor{text}{RGB}{190,190,190} % (text, light silver)
+
+% Beamer Colors
+\setbeamercolor{palette primary}{bg=primary,fg=text}
+\setbeamercolor{palette secondary}{bg=secondary,fg=text}
+\setbeamercolor{palette tertiary}{bg=primary,fg=text}
+\setbeamercolor{structure}{fg=primary} % itemize, enumerate, etc
+\setbeamercolor{frametitle}{fg=primary}
+
+% Transparency for itemized listing
+%\setbeamercovered{transparent}
+
+% Title Page
+\title{On the Algebraic Connectivity of Directed Graphs}
+\author{Thomas R. Cameron}
+\institute{Davidson College}
+\date{May 7, 2019}
+
+\begin{document}
+% Title Frame
+\begin{frame}
+	\titlepage
+\end{frame}
+
+% Outline
+%\AtBeginSection[]{
+ %\frame<beamer>{
+  %\frametitle{Outline}   
+  %\tableofcontents[currentsection]
+ %}
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Algebraic Connectivity
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Algebraic Connectivity}
+
+\begin{frame}{Definition}
+In~\cite{Wu2005-1}, the algebraic connectivity of a directed graph $G$ on $n$ vertices is defined by~\footnote{Another definition of algebraic connectivity is given in~\cite{Wu2005-2}}.
+\vfill
+\[
+\alpha(G) = \min_{x\in P}x^{T}Lx,
+\]
+\vfill
+where $L$ is the graph Laplacian and
+\vfill
+\[
+P= \{x\in\mathbb{R}^{n}\colon~\norm{x}=1,~x\perp e\}
+\]
+\end{frame}
+
+\begin{frame}{Properties}
+\begin{itemize}
+\item	$\alpha(G)$ is independent of the ordering of vertices since $P$ is an invariant subspace of permutation matrices.
+\vfill
+\item	Let $Q$ be a unitary matrix whose columns span $P$, then
+	\[
+	\alpha(G) = \lambda_{\text{min}}\left(\frac{1}{2}Q^{T}\left(L+L^{T}\right)Q\right)
+	\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Properties}
+\begin{itemize}
+\item	If the graph $G$ is undirected, then the definition of $\alpha(G)$ coincides with Fiedler's definition of algebraic connectivity~\cite{Fiedler1973}.
+\vfill
+\item For a graph $G$ with Laplacian $L$, we have
+	\[
+	\lambda_{1}\left(\frac{1}{2}\left(L+L^{T}\right)\right)\leq\alpha(G)\leq\lambda_{2}\left(\frac{1}{2}\left(L+L^{T}\right)\right).
+	\]	
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Examples}
+\begin{minipage}{0.45\textwidth}
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+Eigenvalues of the Laplacian:
+\[
+\sigma(L)=\{2,1,0,2,1,0\}
+\]
+\vfill
+Spectral Rankability:
+\[
+\text{rankH}(G) = 0.6
+\]
+\vfill
+Algebraic Connectivity:
+\[
+\alpha(G) = -0.389
+\]
+\vfill
+Connectivity Rankability:
+\begin{align*}
+\text{rankA}(G) &= 1.226 \\
+&\sim 1.0
+\end{align*}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Examples}
+\begin{minipage}{0.45\textwidth}
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](2) to [out=45,in=225,looseness=0](4);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+Eigenvalues of the Laplacian:
+\[
+\sigma(L)=\{2,2,0,2,1,0\}
+\]
+\vfill
+Spectral Rankability:
+\[
+\text{rankH}(G) = 0.6
+\]
+\vfill
+Algebraic Connectivity:
+\[
+\alpha(G) = -0.303
+\]
+\vfill
+Connectivity Rankability:
+\begin{align*}
+\text{rankA}(G) &= 1.139 \\
+&\sim 0.929
+\end{align*}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Examples}
+\begin{minipage}{0.45\textwidth}
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=gray, color=white] (1) at (-1,2) {$1$};
+	\node[circle, shading=ball, ball color=gray, color=white] (2) at (-1,0) {$2$};
+	\node[circle, shading=ball, ball color=gray, color=white] (3) at (-1,-2) {$3$};
+	\node[circle, shading=ball, ball color=gray, color=white] (4) at (1,2) {$4$};
+	\node[circle, shading=ball, ball color=gray, color=white] (5) at (1,0) {$5$};
+	\node[circle, shading=ball, ball color=gray, color=white] (6) at (1,-2) {$6$};
+	
+	\draw[gray,->,thick](1) to [out=270,in=90,looseness=0](2);
+	\draw[gray,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[gray,->,thick](1) to [out=225,in=135,looseness=1](3);
+	\draw[gray,->,thick](3) to [out=45,in=225,looseness=0](4);
+	\draw[gray,->,thick](4) to [out=270,in=90,looseness=0](5);
+	\draw[gray,->,thick](5) to [out=270,in=90,looseness=0](6);
+	\draw[gray,->,thick](4) to [out=315,in=45,looseness=1](6);
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+Eigenvalues of the Laplacian:
+\[
+\sigma(L)=\{2,1,1,2,1,0\}
+\]
+\vfill
+Spectral Rankability:
+\[
+\text{rankH}(G) = 0.6
+\]
+\vfill
+Algebraic Connectivity:
+\[
+\alpha(G) = -0.068
+\]
+\vfill
+Connectivity Rankability:
+\begin{align*}
+\text{rankA}(G) &= 0.905 \\
+&\sim 0.738
+\end{align*}
+\end{minipage}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{Bibliography}
+\bibliographystyle{amsalpha}
+\bibliography{../Bibliography}
+\end{frame}
+
+\end{document}

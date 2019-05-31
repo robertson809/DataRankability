@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{Anderson2018}
+{\sc P.~E. Anderson, T.~P. Chartier, and A.~N. Langville}, {\em The rankability
+  of data}, SIMODS,  (2018).
+
+\bibitem{Bauer2012}
+{\sc F.~Bauer}, {\em Normalized graph laplacians for directed graphs}, Linear
+  Algebra Appl., 436 (2012), pp.~4193--4222.
+
+\bibitem{Berman1994}
+{\sc A.~Berman and R.~J. Plemmons}, {\em Nonnegative Matrices in the
+  Mathematical Sciences}, SIAM, Philadelphia, PA, 1994.
+
+\bibitem{Brualdi1991}
+{\sc R.~Brualdi and H.~Ryser}, {\em Combinatorial Matrix Theory}, Cambridge
+  University Press, United Kingdom, 1991.
+
+\bibitem{Taussky1949}
+{\sc O.~Taussky}, {\em A recurring theorem on determinants}, Amer. Math.
+  Monthly, 56 (1949), pp.~672--676.
+
+\bibitem{Wu2005}
+{\sc C.~W. Wu}, {\em On {R}ayleigh-{R}itz ratios of a generalized {L}aplacian
+  matrix of drected graphs}, Linear Algebra Appl.,  (2005), pp.~207--227.
+
+\end{thebibliography}

@@ -1,0 +1,264 @@
+% document class and packages
+\documentclass{beamer}
+\usepackage{algorithm,algorithmic}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+% new commands and operators
+\DeclareMathOperator{\md}{md}
+\DeclareMathOperator{\sv}{sv}
+\DeclareMathOperator{\hd}{hd}
+\newcommand\abs[1]{\left|#1\right|}
+
+\newtheorem{proposition}[theorem]{Proposition}
+
+% remove figure caption prefix
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+% hyperlinks setup
+\hypersetup{colorlinks,breaklinks,
+	urlcolor=[rgb]{0,0.75,1},
+	linkcolor=[rgb]{0.75,0.75,0.75}}
+
+% empty navigation symbols
+\beamertemplatenavigationsymbolsempty
+
+% remove navigation dots on miniframes
+\makeatletter
+\def\beamer@writeslidentry{\clearpage\beamer@notesactions}
+\makeatother
+
+% Use Theme
+\usetheme{Warsaw}
+\useoutertheme[footline=authortitle]{miniframes}
+\useinnertheme[shadow=true]{rounded}
+
+% Colors
+\definecolor{primary}{RGB}{0, 0, 0} % (primary, black)
+\definecolor{secondary}{RGB}{102, 178, 255} % (secondary, light blue)
+\definecolor{text}{RGB}{190,190,190} % (text, light silver)
+
+% Beamer Colors
+\setbeamercolor{palette primary}{bg=primary,fg=text}
+\setbeamercolor{palette secondary}{bg=secondary,fg=text}
+\setbeamercolor{palette tertiary}{bg=primary,fg=text}
+\setbeamercolor{structure}{fg=primary} % itemize, enumerate, etc
+\setbeamercolor{frametitle}{fg=primary}
+
+% Transparency for itemized listing
+%\setbeamercovered{transparent}
+
+% Title Page
+\title{Graph Laplacian and the Rankability of Data}
+\author{Thomas R. Cameron}
+\institute{Davidson College}
+\date{\today}
+
+\begin{document}
+% Title Frame
+\begin{frame}
+	\titlepage
+\end{frame}
+
+% Outline
+%\AtBeginSection[]{
+ %\frame<beamer>{
+  %\frametitle{Outline}   
+  %\tableofcontents[currentsection]
+ %}
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Definitions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definitions}
+
+\begin{frame}{Weighted Directed Graphs}
+Let $\Gamma=(V,E,w)$ be a weighted directed graph (simple).
+\vfill
+\begin{itemize}
+\item The out degree of vertex $i$ is defined by $d_{i}^{out}=\sum_{j\in V}w_{ij}$.
+\vfill
+\item	$\Gamma$ is weakly connected if replacing all of its edges with undirected edges produces a connected undirected graph.
+\vfill
+\item	$\Gamma$ is strongly connected if for any pair of vertices $i\neq j$, there is a path from $i$ to $j$ and a path from $j$ to $i$. 
+\end{itemize}
+\vfill
+\end{frame}
+
+\begin{frame}{Isolated Vertices and Subgraphs}
+Let $\Gamma'=(V',E',w')$ be an induced subgraph of $\Gamma$.
+\vfill
+\begin{itemize}
+\item	Vertex $i$ is isolated if $w_{ij}=0$ for all $j\in V$.
+\vfill
+\item	Vertex $i$ is quasi-isolated if $\sum_{j\in V}w_{ij}=0$.
+\vfill
+\item	Subgraph $\Gamma'$ is isolated if $w_{ij}=0$ for all $i\in V'$ and $j\notin V'$.
+\vfill
+\item Subgraph $\Gamma'$ is quasi-isolated if $\sum_{j\in V\setminus{V'}}w_{ij}=0$ for all $i\in V'$.  
+\end{itemize}
+\vfill
+\end{frame}
+
+\begin{frame}{Graph Laplace Operator}
+The Laplace operator $\Delta$ of the graph $\Gamma$ is defined by
+\vfill
+\[
+\Delta f(i) = 	\begin{cases}
+			f(i)d_{i}^{out} - \sum_{j}w_{ij}f(j) & \text{if $d_{i}^{out}\neq 0$} \\
+			0	&	\text{otherwise}
+			\end{cases},
+\]
+\vfill
+where $f$ is a complex valued function on $V$.
+\vfill
+\end{frame}
+
+\begin{frame}{Reduced Graph Laplace Operator}
+Let $V_{R}\subseteq V$ be the set of vertices that are not quasi-isolated.
+The reduced Laplace operator $\Delta_{R}$ is defined by
+\vfill
+\[
+\Delta_{R}f(i)=f(i)d_{i}^{out} - \sum_{j\in V_{R}}w_{ij}f(j),~i\in V_{R},
+\]
+\vfill
+where $f$ is a complex valued function on $V_{R}$ and $d_{i}^{out}$ is the out degree of vertex $i$ in $\Gamma$.
+\vfill
+\end{frame}
+
+\begin{frame}{Frobenius Normal Form}
+The Frobenius normal form of the Laplace operator:
+\vfill
+\[
+\Delta = 	\left(\begin{array}{cccc}
+		\Delta_{1} & \Delta_{12} & \cdots & \Delta_{1z} \\
+		0 & \Delta_{2} & \cdots & \Delta_{2z} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots & \Delta_{z}
+		\end{array}\right),
+\]
+\vfill
+where $\Delta_{1},\ldots,\Delta_{z}$ are square matrices corresponding to the strongly connected components of $\Gamma$.
+\vfill
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Spectral Properties
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Spectral Properties}
+
+\begin{frame}{Basic Properties}
+Let $\sigma(\Delta)$ denote the set of eigenvalues of the Laplace operator $\Delta$. 
+Then,
+\vfill
+\begin{itemize}
+\item	$0\in\sigma(\Delta)$,
+\vfill
+\item $\sigma(\Delta)$ is symmetric with respect to the real axis,
+\vfill
+\item $\sigma(\Delta)=\sigma(\Delta_{R})\cup\{\text{$0$, repeated $\abs{V\setminus{V_{R}}}$ times}\}$,
+\vfill
+\item	$\sigma(\Delta)=\bigcup_{i}^{z}\sigma(\Delta_{i})$,
+\vfill
+\item	$\sigma(\Delta)$ is the union of the spectra of the Laplace operator reduced to the weakly connected components of $\Gamma$.
+\end{itemize}
+\vfill
+\end{frame}
+
+\begin{frame}{Spanning Tree}
+A graph $\Gamma$ is said to have a spanning tree if there exists a vertex from which all other vertices can be reached following directed edges.
+\vfill
+\begin{proposition}
+Every graph $\Gamma$ contains at least one isolated strongly connected component. 
+Furthermore, $\Gamma$ contains exactly one isolated strongly connected component if and only if $\Gamma$ contains a spanning Tree.
+\end{proposition}
+\end{frame}
+
+\begin{frame}{Isolated Subgraph}
+\begin{theorem}
+Let $\Gamma$ be a directed graph with non-negative weights, and let $\Gamma_{i}$, $1\leq i\leq z$, be its strongly connected components.
+Then, zero is an eigenvalue (in fact a simple eigenvalue) of $\Delta_{i}$ if and only if $\Gamma_{i}$ is isolated. 
+\end{theorem}
+\vfill
+\begin{corollary}
+For directed graphs $\Gamma$ with non-negative weights, the following are equivalent:
+\begin{enumerate}[i.]
+\item	The multiplicity (algebraic) of the zero eigenvalue of $\Delta$ is equal to $k$.
+\item	There exist $k$ isolated strongly connected components in $\Gamma$.
+\item	The minimum number of directed trees needed to span the whole graph is equal to $k$. 
+\end{enumerate}
+\end{corollary}
+\vfill
+\end{frame}
+
+\begin{frame}{Spectral Characterization}
+\begin{theorem}
+Let $\Gamma$ be a directed graph on $n$-vertices with non-negative weights.
+Then, $\sigma(\Delta)=\{d_{1}^{out},\ldots,d_{n}^{out}\}$ if and only if $\Gamma$ is acyclic.
+\end{theorem}
+\vfill
+\begin{corollary}
+Let $\Gamma$ be a directed graph on $n$-vertices with binary weights.
+Then, $\sigma(\Delta)=\{d_{1}^{out},\ldots,d_{n}^{out}\}$, where $d_{i}^{out}=n-i$ for all $i=1,\ldots,n$, if and only if $\Gamma$ is a perfect dominance graph. 
+\end{corollary}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Rankability Measure
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Rankability Measure}
+
+\begin{frame}{Spectral Distance}
+Let $A$ have eigenvalues $\lambda_{1},\ldots,\lambda_{n}$ and $\tilde{A}$ have eigenvalues $\tilde{\lambda}_{1},\ldots,\tilde{\lambda}_{n}$.
+\vfill
+\begin{itemize}
+\item	The spectral variation of $\tilde{A}$ with respect to $A$ is
+\[
+\sv_{A}(\tilde{A})=\max_{i}\min{j}\abs{\tilde{\lambda}_{i}-\lambda_{j}}.
+\]
+\vfill
+\item	The Hausdorff distance between the eigenvalues of $A$ and $\tilde{A}$ is
+\[
+\hd(A,\tilde{A})=\max\{sv_{A}(\tilde{A}),\sv_{\tilde{A}}(A)\}
+\]
+\vfill
+\item	The matching distance between the eigenvalues of $A$ and $\tilde{A}$ is
+\[
+\md(A,\tilde{A})=\min_{\pi}\max_{i}\abs{\tilde{\lambda}_{\pi(i)}-\lambda_{i}}
+\]
+\end{itemize}
+\vfill
+\end{frame}
+
+\begin{frame}{Rankability Measure}
+\begin{example}
+\[
+\left(\begin{array}{c | c | c}
+Graph & Hausdorff & Matching \\
+\hline
+Dominance Graph & 0.0 & 0.0 \\
+Perturbed Dominance Graph & 0.62 & 0.62 \\
+Perturbed Random Graph & 1.23 & 1.70 \\
+Nearly Disconnected & 2.0 & 2.0 \\
+Random & 2.65 & 2.65 \\
+Cyclic & 3.0 & 3.0 \\
+Completely Connected & 3.0 & 5.0 \\
+Empty Graph & 5.0 & 5.0
+\end{array}\right)
+\]
+\end{example}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								References 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}[allowframebreaks]{References}
+%\bibliographystyle{amsalpha}
+%\bibliography{../Bibliography}
+%\end{frame}
+
+\end{document}

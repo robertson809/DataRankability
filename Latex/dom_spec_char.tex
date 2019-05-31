@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage[margin=1.00in]{geometry}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}[theorem]{Example}
+
+\DeclareMathOperator{\md}{md}
+
+
+
+\title{A Note on Rankability:\\
+\emph{\large{Spectral Characterization of the Dominance Graph}}}
+\author{Thomas R. Cameron}
+\date{March 2019}
+
+\begin{document}
+\maketitle
+\abstract{
+This note is an organization of the author's development of a spectral characterization of dominance graphs and its application to the problem of rankability. 
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                    				Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                    				Spectral Characterization
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Spectral Characterization}
+Let $G=(V,E)$ be a directed graph, where $V\subseteq\mathbb{N}$ and $(i,j)\in E$ if vertex $i$ points to vertex $j$.
+We define the adjacency matrix of $G$ to be $A(G)=[a_{ij}]$, where $a_{ij}=1$ if $(i,j)\in E$ and $a_{ij}=0$ otherwise. 
+Similarly, the degree matrix of $G$, denoted $D(G)=[d_{ij}]$, is defined by $d_{ij}=\deg(i)$ (out degree) if $i=j$ and $d_{ij}=0$ otherwise.
+
+We define the graph Laplacian by 
+\begin{equation}\label{eq:laplacian}
+L(G)=D(G)-A(G).
+\end{equation}
+Note that for undirected graphs this definition is standard. 
+However, the spectral approach for directed graphs has not been well developed, and the definition of the graph Laplacian is not standard.
+For instance, another definition for the Laplacian of a directed graph is given in~\cite{Chung2005}.
+
+For undirected graphs, there is a deep connection between the properties of a graph and the spectral properties of the Laplacian. 
+We will see a similar phenomena for directed graphs and the graph Laplacian as defined in~\eqref{eq:laplacian}.
+We motivate our main result with the following example.
+
+\begin{example}
+Let $G$ denote the dominance graph on $6$ vertices shown in Figure 2 of~\cite{Anderson2018}. 
+Note that the Laplacian of this graph is 
+\[
+L(G)=
+\begin{bmatrix}
+5 & -1 & -1 & -1 & -1 & -1 \\
+0 & 4 & -1 & -1 & -1 & -1 \\
+0 & 0 & 3 & -1 & -1 & -1 \\
+0 & 0 & 0 & 2 & -1 & -1 \\
+0 & 0 & 0 & 0 & 1 & -1 \\
+0 & 0 & 0 & 0 & 0 & 0
+\end{bmatrix}.
+\]
+It is clear that the eigenvalues of $L(G)$ are $\lambda_{k}=6-k$, for $k=1,\ldots,6$.
+Moreover, the corresponding eigenvectors are $v_{1}=e_{1}$, and $v_{k}=v_{k-1}+e_{k}$, for $k=2,\ldots,6$.
+
+Suppose that we reorder the vertices of the graph $G$ to obtain the isomorphic graph $\hat{G}$ that corresponds to the ranking $[1,3,4,2,5,6]$.
+The resulting graph Laplacian is as follows:
+\[
+L(\hat{G})=
+\begin{bmatrix}
+ 5 & -1 & -1 & -1 & -1 & -1 \\
+ 0 & 3 & -1 & 0 & -1 & -1 \\
+ 0 & 0 & 2 & 0 & -1 & -1 \\
+ 0 & -1 & -1 & 4 & -1 & -1 \\
+ 0 & 0 & 0 & 0 & 1 & -1 \\
+ 0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}.
+\]
+Note that $L(\hat{G})=P^{T}L(G)P$, where $P$ is the permutation matrix (column representation) corresponding to the inverse permutation $\pi^{-1}$, where
+\[
+\pi=
+\left(
+\begin{array}{cccccc}
+1 & 2 & 3 & 4 & 5 & 6 \\
+1 & 3 & 4 & 2 & 5 & 6
+\end{array}
+\right).
+\]
+Clearly the eigenvalues of $L(G)$ and $L(\hat{G})$ are the same, and the eigenvectors of $L(G)$ and $L(\hat{G})$ are closed related.
+In particular, if the eigenvectors of $L(\hat{G})$ are $\{\hat{v}_{1},\ldots,\hat{v}_{6}\}$, then $P\hat{v}_{k}=v_{k}$ for $k=1,\ldots,m$. 
+\end{example}
+
+In Example 2.1, there was nothing special about the number of vertices or the reordering of the vertices. 
+This implies a result that is not too surprising: 
+Let $G$ be any dominance graph on the vertices $\{1,2,\ldots,n\}$. 
+Then, the eigenvalues of $L(G)$ are $\lambda_{k}=n-k$ for $k=1,\ldots,n$, and there exists a permutation matrix $P$ such that
+the corresponding eigenvectors $v_{1},\ldots,v_{n}$ of $L(G)$ satisfy $Pv_{1}=e_{1}$ and $Pv_{k}=Pv_{k-1}+e_{k}$ for $k=2,\ldots,n$.
+What is surprising is that not only is this spectral information necessary for dominance graphs it is also sufficient. 
+
+\begin{theorem}\label{thm:spec-char}
+Let $G$ be a graph on the vertices $\{1,2,\ldots,n\}$.
+Then, $G$ is a dominance graph if and only if the eigenvalues of $L(G)$ are $\lambda_{k}=n-k$ for $k=1,\ldots,n$ and the corresponding eigenvectors $v_{1},\ldots,v_{n}$ of $L(G)$ satisfy $Pv_{1}=e_{1}$ and $Pv_{k}=Pv_{k-1}+e_{k}$ for $k=2,\ldots,n$ and some permutation matrix $P$. 
+\end{theorem}
+\begin{proof}
+Suppose that $G$ is a dominance graph corresponding to the ranking $[r_{1},\ldots,r_{n}]$.
+Let $\pi$ be a permutation defined by $\pi(1)=r_{1},\ldots,\pi(n)=r_{n}$, and also let $P$ denote the permutation matrix corresponding to $\pi$. 
+Then,
+\[
+PL(G)P^{T}=
+\begin{bmatrix}
+(n-1) & -1 & -1 & \cdots & -1 \\
+0 & (n-2) & -1 & \cdots & -1 \\
+\vdots & & \ddots & & \vdots \\
+0 & 0 & \cdots & 1 & -1 \\
+0 & 0 & \cdots & 0 & 0
+\end{bmatrix}.
+\]
+It is clear that the eigenvalues of $L(G)$ are $\lambda_{k}=(n-k)$ for $k=1,\ldots,n$.
+Furthermore, note that $PL(G)P^{T}e_{1}=(n-1)e_{1}$, $PL(G)P^{T}(e_{1}+e_{2})=(n-2)(e_{1}+e_{2})$, and so on.
+Therefore, the corresponding eigenvectors $v_{1},\ldots,v_{n}$ of $L(G)$ satisfy $Pv_{1}=e_{1}$ and $Pv_{k}=Pv_{k-1}+e_{k}$ for $k=2,\ldots,n$.
+
+Conversely, suppose that $G$ is a graph such that its graph Laplacian $L(G)$ has eigenvalues $\lambda_{k}=n-k$ for $k=1,\ldots,n$ and corresponding eigenvectors $v_{1},\ldots,v_{n}$ that satisfy $Pv_{1}=e_{1}$ and $Pv_{k}=Pv_{k-1}+e_{k}$ for $k=2,\ldots,n$ and some permutation matrix $P$.
+Then, for instance, $L(G)v_{1}=(n-1)v_{1}$, i.e., $PL(G)P^{T}e_{1}=(n-1)e_{1}$.
+
+Let $\pi$ be the permutation corresponding to the matrix $P$.
+If we write out $L(G)$ in terms of the adjacency matrix and degree matrix, then we have
+\[
+PD(G)P^{T}e_{1}-PA(G)P^{T}e_{1}=(n-1)e_{1}.
+\]
+Since the diagonal entries of $A(G)$ and, therefore, $PA(G)P^{T}$ cannot be zero, it follows that $\deg(\pi(1))=(n-1)$ and the first column of the adjacency matrix $PA(G)P^{T}$ is the zero vector.
+Similarly, the second eigenvector equation $L(G)v_{2}=(n-2)v_{2}$ can be written as
+\[
+PD(G)P^{T}(e_{1}+e_{2})-PA(G)P^{T}(e_{1}+e_{2})=(n-2)(e_{1}+e_{2}).
+\]
+Again, since the diagonal entries of $PA(G)P^{T}$ cannot be zero, it follows that $\deg(\pi(2))=(n-2)$ and the second column of $PA(G)P^{T}$ is equal to $e_{1}$.
+
+We continue in this fashion, thus showing that $\deg(\pi(k))=(n-k)$ for $k=1,\ldots,n$ and the columns of $PA(G)P^{T}$ are the zero vector, $e_{1}$, $(e_{1}+e_{2})$, and so on until the last column which is equal to $(e_{1}+e_{2}+\cdots+e_{n-1})$.
+Therefore, $G$ is isomorphic to the dominance graph with ranking $[1,2,\ldots,n]$. 
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                    				Rankability Metric
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Rankability Metric}
+The rankability of data refers to a dataset's inherent ability to produce a meaningful ranking of its items. 
+In~\cite{Anderson2018}, a rankability measure is proposed based on the distance to the nearest dominance graph.
+The distance is measured as the number of changes (edges deleted or added) that would need to be made in order to obtain a dominance graph.
+In this section, we propose that the distance be measured based on the spectral characterization of dominance graphs in Theorem~\ref{thm:spec-char}.
+
+Let $G$ be a graph on $n$ vertices.
+Denote by $\lambda_{1},\ldots,\lambda_{n}$ the eigenvalues of $L(G)$ and by $v_{1},\ldots,v_{n}$ the corresponding eigenvectors. 
+We define the matching distance between the eigenvalues of $L(G)$ and the eigenvalues of a dominance graph by
+\[
+\md_{\lambda}(G) := \min_{\pi}\left\{\max_{i}\left\{ |\lambda_{pi(i)}-(n-i)| \right\}\right\},
+\]
+where $\pi$ is taken over all possible permutations of the spectrum $\sigma(L(G))$ and $i$ is taken over the integers $\{1,\ldots,n\}$.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%						References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{siam}
+\bibliography{Bibliography}
+
+
+\end{document}
