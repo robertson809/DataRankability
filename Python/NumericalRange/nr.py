@@ -77,6 +77,51 @@ def simod_graphs():
         l = 0.5*np.dot(np.transpose(q), np.dot(l,q))
         # numerical range of l
         nr(l)
+        
+###############################################
+###         Three Tourament Graphs          ###
+###############################################
+def three_torn():
+    # graph names
+    nam = ['Three Tournament1','Three Tournament2','Three Tournament3','Three Tournament4',\
+    'Three Tournament5','Three Tournament6','Three Tournament7','Three Tournament8']
+    # adjacency matrices
+    adj = [np.array([[0.,0.,0.],[1,0,0],[1,1,0]]),#1
+            np.array([[0.,1,0],[0.,0,1],[1,0,0]]),#2
+            np.array([[0.,1,1],[0.,0,1],[0,0,0]]),#3
+            np.array([[0.,1,0],[0.,0,0],[1,1,0]]),#4
+            np.array([[0.,1,1],[0.,0,0],[0.,1,0]]),#5
+            np.array([[0.,0,0],[1,0.,1],[1,0.,0]]),#6
+            np.array([[0.,0,1],[1,0.,1],[0,0.,0]]),#7
+            np.array([[0.,0,1],[1,0.,0],[0.,1,0]])#8
+            ]
+    # laplacian matrices
+    lap = []
+    for k in range(len(adj)):
+        a = adj[k]
+        n = len(a)
+        x = np.array([np.sum(a[i,:]) for i in range(n)])
+        d = np.diag(x)
+        l = d - a;
+        lap.append(l)
+    # numerical range test
+    for k in range(len(lap)):
+        # write name
+        print(nam[k])
+        # graph laplacian
+        l = lap[k]
+        n = len(l)
+        # orthonormal matrix q
+        q = np.zeros((n,n-1))
+        for j in range(n-1):
+            q[0:j+1,j] = 1
+            q[j+1,j] = -(j+1)
+            q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
+        # projection transformation
+        l = 0.5*np.dot(np.transpose(q), np.dot(l,q))
+        # numerical range of l
+        nr(l)
+
 
 ###############################################
 ###             Dominance Graphs            ###
@@ -102,4 +147,5 @@ def dominance_graphs():
         
 
 #simod_graphs()
-dominance_graphs()
+#dominance_graphs()
+three_torn()
