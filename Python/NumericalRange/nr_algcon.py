@@ -16,7 +16,7 @@ from math import sqrt as sqrt
 ###############################################
 def nr(a):
     """Returns plot of the numerical range of a matrix with its eigenvalues."""
-    nv = 120
+    nv = 360
     m, n = a.shape
     if(m!=n):
         print('Warning: matrix is non-square')
