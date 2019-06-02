@@ -1,0 +1,14 @@
+   1, Abilene_Chr
+   2, Cent_Arkansas
+   3, Houston_Bap
+   4, Incarnate_Word
+   5, Lamar
+   6, McNeese_St
+   7, New_Orleans
+   8, Nicholls_St
+   9, Northwestern_LA
+  10, Oral_Roberts
+  11, Sam_Houston_St
+  12, SE_Louisiana
+  13, SF_Austin
+  14, TAM_C._Christi

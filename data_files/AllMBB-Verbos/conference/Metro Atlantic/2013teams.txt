@@ -1,0 +1,10 @@
+   1, Canisius
+   2, Fairfield
+   3, Iona
+   4, Loyola_MD
+   5, Manhattan
+   6, Marist
+   7, Niagara
+   8, Rider
+   9, Siena
+  10, St_Peter's

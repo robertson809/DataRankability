@@ -1,0 +1,10 @@
+   1, Butler
+   2, Creighton
+   3, DePaul
+   4, Georgetown
+   5, Marquette
+   6, Providence
+   7, Seton_Hall
+   8, St_John's
+   9, Villanova
+  10, Xavier

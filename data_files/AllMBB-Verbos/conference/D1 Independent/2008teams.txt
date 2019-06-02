@@ -1,0 +1,11 @@
+   1, Chicago_St
+   2, CS_Bakersfield
+   3, Houston_Bap
+   4, Longwood
+   5, NC_Central
+   6, NJIT
+   7, Presbyterian
+   8, Savannah_St
+   9, Utah_Valley
+  10, UTRGV
+  11, W_Salem_St

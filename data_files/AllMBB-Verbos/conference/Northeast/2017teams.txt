@@ -1,0 +1,10 @@
+   1, Bryant
+   2, Central_Conn
+   3, F_Dickinson
+   4, LIU_Brooklyn
+   5, Mt_St_Mary's
+   6, Robert_Morris
+   7, Sacred_Heart
+   8, St_Francis_NY
+   9, St_Francis_PA
+  10, Wagner

@@ -1,0 +1,11 @@
+   1, Belmont
+   2, Campbell
+   3, ETSU
+   4, FL_Atlantic
+   5, Gardner_Webb
+   6, Jacksonville
+   7, Kennesaw
+   8, Lipscomb
+   9, Mercer
+  10, North_Florida
+  11, Stetson

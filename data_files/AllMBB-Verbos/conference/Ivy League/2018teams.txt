@@ -1,0 +1,8 @@
+   1, Brown
+   2, Columbia
+   3, Cornell
+   4, Dartmouth
+   5, Harvard
+   6, Penn
+   7, Princeton
+   8, Yale

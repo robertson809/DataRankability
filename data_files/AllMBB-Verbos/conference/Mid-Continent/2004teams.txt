@@ -1,0 +1,9 @@
+   1, Centenary
+   2, Chicago_St
+   3, IUPUI
+   4, Missouri_KC
+   5, Oakland
+   6, Oral_Roberts
+   7, Southern_Utah
+   8, Valparaiso
+   9, W_Illinois

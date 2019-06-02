@@ -1,0 +1,14 @@
+   1, Charlotte
+   2, Dayton
+   3, Duquesne
+   4, Fordham
+   5, G_Washington
+   6, La_Salle
+   7, Massachusetts
+   8, Rhode_Island
+   9, Richmond
+  10, St_Bonaventure
+  11, St_Joseph's_PA
+  12, St_Louis
+  13, Temple
+  14, Xavier

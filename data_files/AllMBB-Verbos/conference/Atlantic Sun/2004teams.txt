@@ -1,0 +1,11 @@
+   1, Belmont
+   2, Campbell
+   3, FL_Atlantic
+   4, Gardner_Webb
+   5, Georgia_St
+   6, Jacksonville
+   7, Lipscomb
+   8, Mercer
+   9, Stetson
+  10, Troy
+  11, UCF

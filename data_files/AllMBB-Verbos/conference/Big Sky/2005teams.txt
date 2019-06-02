@@ -1,0 +1,8 @@
+   1, CS_Sacramento
+   2, E_Washington
+   3, Idaho_St
+   4, Montana
+   5, Montana_St
+   6, Northern_Arizona
+   7, Portland_St
+   8, Weber_St

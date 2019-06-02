@@ -1,0 +1,13 @@
+   1, Dayton
+   2, Duquesne
+   3, Fordham
+   4, G_Washington
+   5, George_Mason
+   6, La_Salle
+   7, Massachusetts
+   8, Rhode_Island
+   9, Richmond
+  10, St_Bonaventure
+  11, St_Joseph's_PA
+  12, St_Louis
+  13, VA_Commonwealth

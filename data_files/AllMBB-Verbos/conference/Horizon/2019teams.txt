@@ -1,0 +1,10 @@
+   1, Cleveland_St
+   2, Detroit
+   3, IL_Chicago
+   4, IUPUI
+   5, N_Kentucky
+   6, Oakland
+   7, WI_Green_Bay
+   8, WI_Milwaukee
+   9, Wright_St
+  10, Youngstown_St

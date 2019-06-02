@@ -1,0 +1,9 @@
+   1, Birmingham_So
+   2, Charleston_So
+   3, Coastal_Car
+   4, High_Point
+   5, Liberty
+   6, Radford
+   7, UNC_Asheville
+   8, VMI
+   9, Winthrop

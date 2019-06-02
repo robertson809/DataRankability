@@ -1,0 +1,12 @@
+   1, Appalachian_St
+   2, Chattanooga
+   3, Citadel
+   4, Col_Charleston
+   5, Davidson
+   6, Elon
+   7, Furman
+   8, Ga_Southern
+   9, Samford
+  10, UNC_Greensboro
+  11, W_Carolina
+  12, Wofford

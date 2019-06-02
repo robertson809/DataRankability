@@ -1,0 +1,12 @@
+   1, Bryant
+   2, Central_Conn
+   3, F_Dickinson
+   4, LIU_Brooklyn
+   5, Monmouth_NJ
+   6, Mt_St_Mary's
+   7, Quinnipiac
+   8, Robert_Morris
+   9, Sacred_Heart
+  10, St_Francis_NY
+  11, St_Francis_PA
+  12, Wagner

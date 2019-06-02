@@ -1,0 +1,10 @@
+   1, Butler
+   2, Cleveland_St
+   3, Detroit
+   4, IL_Chicago
+   5, Loyola-Chicago
+   6, Valparaiso
+   7, WI_Green_Bay
+   8, WI_Milwaukee
+   9, Wright_St
+  10, Youngstown_St

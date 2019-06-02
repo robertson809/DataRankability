@@ -1,0 +1,13 @@
+   1, Bethune-Cookman
+   2, Coppin_St
+   3, Delaware_St
+   4, Florida_A&M
+   5, Hampton
+   6, Howard
+   7, MD_E_Shore
+   8, Morgan_St
+   9, NC_A&T
+  10, NC_Central
+  11, Norfolk_St
+  12, S_Carolina_St
+  13, Savannah_St

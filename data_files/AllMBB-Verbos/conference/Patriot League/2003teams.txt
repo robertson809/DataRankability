@@ -1,0 +1,8 @@
+   1, American_Univ
+   2, Army
+   3, Bucknell
+   4, Colgate
+   5, Holy_Cross
+   6, Lafayette
+   7, Lehigh
+   8, Navy

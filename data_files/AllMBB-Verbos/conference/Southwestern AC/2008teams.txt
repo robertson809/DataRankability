@@ -1,0 +1,10 @@
+   1, Alabama_A&M
+   2, Alabama_St
+   3, Alcorn_St
+   4, Ark_Pine_Bluff
+   5, Grambling
+   6, Jackson_St
+   7, MS_Valley_St
+   8, Prairie_View
+   9, Southern_Univ
+  10, TX_Southern

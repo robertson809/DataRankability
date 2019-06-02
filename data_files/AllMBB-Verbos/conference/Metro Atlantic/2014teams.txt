@@ -1,0 +1,11 @@
+   1, Canisius
+   2, Fairfield
+   3, Iona
+   4, Manhattan
+   5, Marist
+   6, Monmouth_NJ
+   7, Niagara
+   8, Quinnipiac
+   9, Rider
+  10, Siena
+  11, St_Peter's

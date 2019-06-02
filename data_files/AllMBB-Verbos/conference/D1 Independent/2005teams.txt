@@ -1,0 +1,8 @@
+   1, Longwood
+   2, N_Colorado
+   3, PFW
+   4, Savannah_St
+   5, TAM_C._Christi
+   6, UC_Davis
+   7, Utah_Valley
+   8, UTRGV

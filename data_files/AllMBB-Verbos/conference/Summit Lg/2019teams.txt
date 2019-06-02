@@ -1,0 +1,9 @@
+   1, Denver
+   2, N_Dakota_St
+   3, NE_Omaha
+   4, North_Dakota
+   5, Oral_Roberts
+   6, PFW
+   7, S_Dakota_St
+   8, South_Dakota
+   9, W_Illinois

@@ -1,0 +1,8 @@
+   1, Centenary
+   2, Gardner_Webb
+   3, Lipscomb
+   4, Morris_Brown
+   5, PFW
+   6, Savannah_St
+   7, TAM_C._Christi
+   8, UTRGV

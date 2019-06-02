@@ -1,0 +1,11 @@
+   1, Campbell
+   2, Charleston_So
+   3, Coastal_Car
+   4, Gardner_Webb
+   5, High_Point
+   6, Liberty
+   7, Presbyterian
+   8, Radford
+   9, UNC_Asheville
+  10, VMI
+  11, Winthrop

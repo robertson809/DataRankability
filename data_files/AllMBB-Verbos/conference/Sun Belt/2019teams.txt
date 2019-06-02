@@ -1,0 +1,12 @@
+   1, Appalachian_St
+   2, Ark_Little_Rock
+   3, Arkansas_St
+   4, Coastal_Car
+   5, Ga_Southern
+   6, Georgia_St
+   7, Louisiana
+   8, South_Alabama
+   9, Texas_St
+  10, Troy
+  11, ULM
+  12, UT_Arlington

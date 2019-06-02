@@ -1,0 +1,10 @@
+   1, Bradley
+   2, Creighton
+   3, Drake
+   4, Evansville
+   5, Illinois_St
+   6, Indiana_St
+   7, Missouri_St
+   8, Northern_Iowa
+   9, S_Illinois
+  10, Wichita_St

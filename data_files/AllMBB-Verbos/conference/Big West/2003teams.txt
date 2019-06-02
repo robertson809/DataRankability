@@ -1,0 +1,10 @@
+   1, Cal_Poly
+   2, CS_Fullerton
+   3, CS_Northridge
+   4, Idaho
+   5, Long_Beach_St
+   6, Pacific
+   7, UC_Irvine
+   8, UC_Riverside
+   9, UC_Santa_Barbara
+  10, Utah_St

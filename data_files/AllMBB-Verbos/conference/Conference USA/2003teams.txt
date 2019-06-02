@@ -1,0 +1,14 @@
+   1, Charlotte
+   2, Cincinnati
+   3, DePaul
+   4, East_Carolina
+   5, Houston
+   6, Louisville
+   7, Marquette
+   8, Memphis
+   9, South_Florida
+  10, Southern_Miss
+  11, St_Louis
+  12, TCU
+  13, Tulane
+  14, UAB

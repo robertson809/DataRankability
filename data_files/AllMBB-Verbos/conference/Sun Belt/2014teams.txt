@@ -1,0 +1,10 @@
+   1, Ark_Little_Rock
+   2, Arkansas_St
+   3, Georgia_St
+   4, Louisiana
+   5, South_Alabama
+   6, Texas_St
+   7, Troy
+   8, ULM
+   9, UT_Arlington
+  10, WKU

@@ -1,0 +1,10 @@
+   1, Bradley
+   2, Drake
+   3, Evansville
+   4, Illinois_St
+   5, Indiana_St
+   6, Loyola-Chicago
+   7, Missouri_St
+   8, Northern_Iowa
+   9, S_Illinois
+  10, Valparaiso

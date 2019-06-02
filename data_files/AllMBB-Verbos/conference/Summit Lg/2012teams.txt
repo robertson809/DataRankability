@@ -1,0 +1,10 @@
+   1, IUPUI
+   2, Missouri_KC
+   3, N_Dakota_St
+   4, Oakland
+   5, Oral_Roberts
+   6, PFW
+   7, S_Dakota_St
+   8, South_Dakota
+   9, Southern_Utah
+  10, W_Illinois

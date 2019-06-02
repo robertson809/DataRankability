@@ -1,0 +1,11 @@
+   1, Campbell
+   2, Charleston_So
+   3, Gardner_Webb
+   4, Hampton
+   5, High_Point
+   6, Longwood
+   7, Presbyterian
+   8, Radford
+   9, SC_Upstate
+  10, UNC_Asheville
+  11, Winthrop

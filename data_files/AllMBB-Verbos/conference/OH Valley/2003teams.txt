@@ -1,0 +1,9 @@
+   1, Austin_Peay
+   2, E_Illinois
+   3, E_Kentucky
+   4, Morehead_St
+   5, Murray_St
+   6, SE_Missouri_St
+   7, Tennessee_St
+   8, Tennessee_Tech
+   9, TN_Martin

@@ -1,0 +1,10 @@
+   1, Denver
+   2, Idaho
+   3, Louisiana_Tech
+   4, New_Mexico_St
+   5, San_Jose_St
+   6, Seattle
+   7, Texas_St
+   8, UT_Arlington
+   9, UT_San_Antonio
+  10, Utah_St

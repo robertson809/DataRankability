@@ -1,0 +1,14 @@
+   1, Bryant
+   2, Chicago_St
+   3, CS_Bakersfield
+   4, Houston_Bap
+   5, Longwood
+   6, NC_Central
+   7, NJIT
+   8, North_Dakota
+   9, Savannah_St
+  10, Seattle
+  11, SIUE
+  12, South_Dakota
+  13, Utah_Valley
+  14, UTRGV

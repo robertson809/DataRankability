@@ -1,0 +1,12 @@
+   1, Cent_Arkansas
+   2, Lamar
+   3, McNeese_St
+   4, Nicholls_St
+   5, Northwestern_LA
+   6, Sam_Houston_St
+   7, SE_Louisiana
+   8, SF_Austin
+   9, TAM_C._Christi
+  10, Texas_St
+  11, UT_Arlington
+  12, UT_San_Antonio

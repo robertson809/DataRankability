@@ -1,0 +1,9 @@
+   1, IUPUI
+   2, Missouri_KC
+   3, N_Dakota_St
+   4, NE_Omaha
+   5, Oakland
+   6, PFW
+   7, S_Dakota_St
+   8, South_Dakota
+   9, W_Illinois

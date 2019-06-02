@@ -1,0 +1,12 @@
+   1, Ark_Little_Rock
+   2, Arkansas_St
+   3, Denver
+   4, FL_Atlantic
+   5, Florida_Intl
+   6, Louisiana
+   7, MTSU
+   8, North_Texas
+   9, South_Alabama
+  10, Troy
+  11, ULM
+  12, WKU

@@ -1,0 +1,9 @@
+   1, Cal_Baptist
+   2, Chicago_St
+   3, CS_Bakersfield
+   4, Grand_Canyon
+   5, Missouri_KC
+   6, New_Mexico_St
+   7, Seattle
+   8, Utah_Valley
+   9, UTRGV

@@ -1,0 +1,14 @@
+   1, Boston_College
+   2, Connecticut
+   3, Georgetown
+   4, Miami_FL
+   5, Notre_Dame
+   6, Pittsburgh
+   7, Providence
+   8, Rutgers
+   9, Seton_Hall
+  10, St_John's
+  11, Syracuse
+  12, Villanova
+  13, Virginia_Tech
+  14, West_Virginia

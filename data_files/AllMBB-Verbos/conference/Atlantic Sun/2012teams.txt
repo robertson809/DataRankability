@@ -1,0 +1,10 @@
+   1, Belmont
+   2, ETSU
+   3, FL_Gulf_Coast
+   4, Jacksonville
+   5, Kennesaw
+   6, Lipscomb
+   7, Mercer
+   8, North_Florida
+   9, SC_Upstate
+  10, Stetson

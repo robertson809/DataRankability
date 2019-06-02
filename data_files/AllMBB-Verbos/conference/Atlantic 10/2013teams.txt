@@ -1,0 +1,16 @@
+   1, Butler
+   2, Charlotte
+   3, Dayton
+   4, Duquesne
+   5, Fordham
+   6, G_Washington
+   7, La_Salle
+   8, Massachusetts
+   9, Rhode_Island
+  10, Richmond
+  11, St_Bonaventure
+  12, St_Joseph's_PA
+  13, St_Louis
+  14, Temple
+  15, VA_Commonwealth
+  16, Xavier

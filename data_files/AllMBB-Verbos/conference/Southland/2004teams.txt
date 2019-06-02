@@ -1,0 +1,11 @@
+   1, Lamar
+   2, McNeese_St
+   3, Nicholls_St
+   4, Northwestern_LA
+   5, Sam_Houston_St
+   6, SE_Louisiana
+   7, SF_Austin
+   8, Texas_St
+   9, ULM
+  10, UT_Arlington
+  11, UT_San_Antonio

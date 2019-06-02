@@ -1,0 +1,9 @@
+   1, Col_Charleston
+   2, Delaware
+   3, Drexel
+   4, Hofstra
+   5, James_Madison
+   6, Northeastern
+   7, Towson
+   8, UNC_Wilmington
+   9, William_&_Mary

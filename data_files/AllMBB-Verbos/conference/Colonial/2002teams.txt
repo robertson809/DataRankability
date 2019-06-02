@@ -1,0 +1,10 @@
+   1, Delaware
+   2, Drexel
+   3, George_Mason
+   4, Hofstra
+   5, James_Madison
+   6, Old_Dominion
+   7, Towson
+   8, UNC_Wilmington
+   9, VA_Commonwealth
+  10, William_&_Mary

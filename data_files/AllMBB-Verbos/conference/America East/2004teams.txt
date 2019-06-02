@@ -1,0 +1,10 @@
+   1, Albany_NY
+   2, Binghamton
+   3, Boston_Univ
+   4, Hartford
+   5, Maine
+   6, New_Hampshire
+   7, Northeastern
+   8, Stony_Brook
+   9, UMBC
+  10, Vermont

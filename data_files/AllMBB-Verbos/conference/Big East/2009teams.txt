@@ -1,0 +1,16 @@
+   1, Cincinnati
+   2, Connecticut
+   3, DePaul
+   4, Georgetown
+   5, Louisville
+   6, Marquette
+   7, Notre_Dame
+   8, Pittsburgh
+   9, Providence
+  10, Rutgers
+  11, Seton_Hall
+  12, South_Florida
+  13, St_John's
+  14, Syracuse
+  15, Villanova
+  16, West_Virginia
