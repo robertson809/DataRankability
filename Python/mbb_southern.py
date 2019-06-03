@@ -1,17 +1,17 @@
-# BIG_EAST: Rankability Measures for Big East Data
+# MBB_Southern: Rankability Measures for MBB Southern Conference
 #
 # Author: Thomas R. Cameron
 # Date: 4/9/2019
 from srm_module import rankA, rankB, specR, connR
 import numpy as np
 
-years = [1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]
+years = [2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015]
 
 #####################################################
 #                 Read Data Matrix                  #
 #####################################################
 def read_data_matrix(year):
-    f = open('../data_files/Big_East_Football/matrices/binaryMatrix'+str(year)+'.txt')
+    f = open('../data_files/ConferencesMBB/Southern/binaryMatrix'+str(year)+'.txt')
     lineList = f.readlines()
     n = len(lineList)
     a = np.zeros((n,n))
@@ -49,5 +49,5 @@ def rankability():
         a = read_data_matrix(years[k])
         print('specR = '+str('%.3f' % specR(a))+' and connR = '+str('%.3f' % connR(a))+'\n')
    
-alpha_beta()
+#alpha_beta()
 rankability()
