@@ -146,6 +146,6 @@ def dominance_graphs():
         nr(l)
         
 
-#simod_graphs()
+simod_graphs()
 #dominance_graphs()
-three_torn()
+#three_torn()
