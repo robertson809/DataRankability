@@ -88,7 +88,9 @@ for i=1:numGames
     team2ID = games(i, 6);
     team2Score = games(i, 8);
     
-    if (team1Score > team2Score) && (r(team1ID) > r(team2ID))
+    if (r(team1ID) == r(team2ID))
+        fprintf('There is a tie between %s and %s\n',cell2mat(teamNames(team1ID)), cell2mat(teamNames(team2ID)))
+    elseif (team1Score > team2Score) && (r(team1ID) > r(team2ID))
         predictedWins(team1ID) = predictedWins(team1ID) + 1;
     elseif (team1Score > team2Score) && (r(team1ID) < r(team2ID))
         missedWins(team1ID) = missedWins(team1ID) + 1;
@@ -102,6 +104,6 @@ end
 percentCorrect = sum(predictedWins)/(sum(predictedWins) + sum(missedWins));
 
 if verbose
-    fprintf('Predictability = %f\n',percentCorrect);
+    fprintf('\nPredictability = %d/%d = %f\n',sum(predictedWins),sum(predictedWins) + sum(missedWins), percentCorrect);
 end
 
