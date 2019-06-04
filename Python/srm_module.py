@@ -85,6 +85,8 @@ def specR(a):
     # eigenvalues of given graph Laplacian
     e = np.linalg.eigvals(l)
     # rankability measure
+    print(e)
+    print(Hausdorff(e,s))
     return (Hausdorff(e,s)+Hausdorff(x,s))/(2*(n-1))
 
 ###############################################
@@ -188,4 +190,4 @@ def connR(a):
     smin = np.amin(e)
     smax = np.amax(e)
     # rankability measure
-    return (abs(smin-emin) + abs(smax-emax))/(2*n)
+    return (abs(smin-emin) + abs(smax-emax))/n

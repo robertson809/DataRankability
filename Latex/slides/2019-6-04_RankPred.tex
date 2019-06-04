@@ -184,4 +184,81 @@ connR & -0.802 & -0.829 & 0.843 \\
 \end{minipage}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								MBB Southern Conference
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{MBB Southern Conference}
+
+\begin{frame}{Results}
+\begin{minipage}{0.45\textwidth}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|| c | c | c | c | c || }
+\hline
+Year & specR & connR & Massey & Colley \\
+\hline
+2002 & 0.294 & 0.174 & 0.579 & 0.654 \\
+2003 & 0.227 & 0.119 & 0.710 & 0.710 \\
+2004 & 0.136 & 0.088 & 0.738 & 0.785 \\
+2005 & 0.147 & 0.083 & 0.729 & 0.738 \\
+2006 & 0.119 & 0.060 & 0.711 & 0.722 \\
+2007 & 0.155 & 0.108 & 0.771 & 0.780 \\
+2008 & 0.200 & 0.058 & 0.775 & 0.775 \\
+2009 & 0.227 & 0.112 & 0.756 & 0.740 \\
+2010 & 0.227 & 0.147 & 0.697 & 0.706 \\
+2011 & 0.094 & 0.060 & 0.748 & 0.782 \\
+2012 & 0.227 & 0.130 & 0.664 & 0.664 \\
+2013 & 0.273 & 0.152 & 0.790 & 0.756 \\
+2014 & 0.173 & 0.100 & 0.745 & 0.776 \\
+2015 & 0.340 & 0.217 & 0.720 & 0.700 \\
+\hline
+\end{tabular}%
+}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|| c | c | c ||}
+\hline
+& Massey & Colley \\
+\hline
+specR & -0.339 & -0.615 \\
+connR & -0.408 & -0.615 \\
+\hline
+\end{tabular}%
+}
+\end{minipage}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Ellipses
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ellipses}
+
+\begin{frame}{Numerical Range}
+The algebraic connectivity is the following minimization problem:
+\[
+\alpha = \min_{\norm{x}=1}Re(x^{*}Q^{T}LQx).
+\]
+\vfill
+The numerical range is defined by
+\[
+W(Q^{T}LQ) = \left\{x^{*}Q^{T}LQx,~\norm{x}=1\right\}
+\]
+\end{frame}
+
+\begin{frame}{Conjecture}
+The numerical range associated with the perfect dominance graph is an ellipse!
+\vfill
+\centering
+\includegraphics[scale=0.5]{figures/nr_dom1}
+\end{frame}
+
+\begin{frame}{Unique Characterization?}
+The numerical range associated with a cycle is a polygon:
+\vfill
+\centering
+\includegraphics[scale=0.5]{figures/nr_cycle1}
+\end{frame}
+
 \end{document}
