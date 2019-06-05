@@ -69,6 +69,23 @@ def Hausdorff(e,s):
     return max(_sv(e,s),_sv(s,e))
     
 ###############################################
+###             acyclicR                    ###
+###############################################
+#   Computes Acyclic Rankability Measure.
+###############################################
+def acyclicR(a):
+    """Computes Acyclic Rankability Measure."""
+    # given graph Laplacian
+    n = len(a)
+    x = np.array([np.sum(a[i,:]) for i in range(n)])
+    d = np.diag(x)
+    l = d - a;
+    # eigenvalues of given graph Laplacian
+    e = np.linalg.eigvals(l)
+    # rankability measure
+    return Hausdorff(e,x)/max(x)
+    
+###############################################
 ###             specR                       ###
 ###############################################
 #   Computes Spectral Rankability Measure.

@@ -26,6 +26,8 @@ def read_data_matrix(year):
 #                alpha_beta                         #
 #####################################################
 def alpha_beta():
+    f = open("big_east_alphabeta.csv","w+")
+    f.write('Year, alpha, beta \n')
     alge_rank = [0 for i in range(len(years))]
     beta_rank = [0 for i in range(len(years))]
     for k in range(len(years)):
@@ -38,16 +40,22 @@ def alpha_beta():
     beta_rank = [beta_rank[i]/m for i in range(len(years))]
     for k in range(len(years)):
         print('Year'+str(years[k])+': ')
-        print('alphaR = '+str('%.3f' % alge_rank[k])+' and betaR = '+str('%.3f' % beta_rank[k])+'\n')
+        f.write(str('%d' % years[k])+str(', %.15f' % alge_rank[k])+str(', %.15f' % beta_rank[k])+'\n')
+        #print('alphaR = '+str('%.3f' % alge_rank[k])+' and betaR = '+str('%.3f' % beta_rank[k])+'\n')
+    f.close()
         
 #####################################################
 #                Rankability                        #
 #####################################################
 def rankability():
+    f = open("big_east_rankability.csv","w+")
+    f.write('Year, specR, connR \n')
     for k in range(len(years)):
         print('Year'+str(years[k])+': ')
         a = read_data_matrix(years[k])
-        print('specR = '+str('%.3f' % specR(a))+' and connR = '+str('%.3f' % connR(a))+'\n')
+        f.write(str('%d' % years[k])+str(', %.15f' % specR(a))+str(', %.15f' % connR(a))+'\n')
+        #print('specR = '+str('%.3f' % specR(a))+' and connR = '+str('%.3f' % connR(a))+'\n')
+    f.close()
    
 alpha_beta()
 rankability()

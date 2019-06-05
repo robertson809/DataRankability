@@ -1,4 +1,4 @@
-# MBB_Southern: Rankability Measures for MBB Southern Conference
+# MBB_West_Coast: Rankability Measures for MBB West Coast Conference
 #
 # Author: Thomas R. Cameron
 # Date: 4/9/2019
@@ -11,7 +11,7 @@ years = [2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015]
 #                 Read Data Matrix                  #
 #####################################################
 def read_data_matrix(year):
-    f = open('../data_files/ConferencesMBB/Southern/binaryMatrix'+str(year)+'.txt')
+    f = open('../data_files/ConferencesMBB/West_Coast/binaryMatrix'+str(year)+'.txt')
     lineList = f.readlines()
     n = len(lineList)
     a = np.zeros((n,n))
@@ -26,7 +26,7 @@ def read_data_matrix(year):
 #                alpha_beta                         #
 #####################################################
 def alpha_beta():
-    f = open("mbb_southern_alphabeta.csv","w+")
+    f = open("mbb_west_coast_alphabeta.csv","w+")
     f.write('Year, alpha, beta \n')
     alge_rank = [0 for i in range(len(years))]
     beta_rank = [0 for i in range(len(years))]
@@ -48,7 +48,7 @@ def alpha_beta():
 #                Rankability                        #
 #####################################################
 def rankability():
-    f = open("mbb_southern_rankability.csv","w+")
+    f = open("mbb_west_coast_rankability.csv","w+")
     f.write('Year, specR, connR \n')
     for k in range(len(years)):
         print('Year'+str(years[k])+': ')
