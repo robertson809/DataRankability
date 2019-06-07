@@ -102,7 +102,7 @@ def specR(a):
     # eigenvalues of given graph Laplacian
     e = np.linalg.eigvals(l)
     # rankability measure
-    return (Hausdorff(e,s)+Hausdorff(x,s))/(2*(n-1))
+    return 1. - ((Hausdorff(e,s)+Hausdorff(x,s))/(2*(n-1)))
 
 ###############################################
 ###             algCon                      ###
