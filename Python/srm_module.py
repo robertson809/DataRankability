@@ -58,6 +58,16 @@ def ranking(a):
     return inv(ind)
     
 ###############################################
+###             Matching                    ###
+###############################################
+#   Matching distance between sets e and s.
+###############################################
+def Matching(e,s):
+    """Matching distance between sets e and s."""
+    perm = list(itertools.permutations(e))
+    return min([max(abs(perm[k]-s)) for k in range(len(perm))])
+    
+###############################################
 ###             Hausdorff                   ###
 ###############################################
 #   Hausdorff distance between sets e and s.
@@ -84,6 +94,25 @@ def acyclicR(a):
     e = np.linalg.eigvals(l)
     # rankability measure
     return Hausdorff(e,x)/max(x)
+    
+###############################################
+###             matchR                      ###
+###############################################
+#   Computes Matching Rankability Measure.
+###############################################
+def matchR(a):
+    """Computes Matching Rankability Measure."""
+    # given graph Laplacian
+    n = len(a)
+    x = np.array([np.sum(a[i,:]) for i in range(n)])
+    d = np.diag(x)
+    l = d - a;
+    # perfect dominance graph spectrum and out-degree
+    s = np.array([n-k for k in range(1,n+1)])
+    # eigenvalues of given graph Laplacian
+    e = np.linalg.eigvals(l)
+    # rankability measure
+    return 1. - ((Matching(e,s)+Matching(x,s))/(2*(n-1)))
     
 ###############################################
 ###             specR                       ###

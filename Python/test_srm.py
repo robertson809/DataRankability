@@ -2,7 +2,7 @@
 #
 # Author: Thomas R. Cameron
 # Date: 4/9/2019
-from srm_module import specR, connR
+from srm_module import specR, connR, matchR
 import numpy as np
 
 #####################################################
@@ -27,7 +27,7 @@ adj = [np.array([[0.,1,1,1,1,1],[0,0.,1,1,1,1],[0,0,0.,1,1,1],[0,0,0,0.,1,1],[0,
 for k in range(len(nam)):
     print(nam[k]+':')
     a = adj[k]
-    print('specR = '+str('%.4f' % specR(a))+' and connR = '+str('%.4f' % connR(a)))
+    print('specR = '+str('%.4f' % specR(a))+' and matchR = '+str('%.4f' % matchR(a)))
 
 #####################################################
 #                 Big East D1 NCAA Football         #
