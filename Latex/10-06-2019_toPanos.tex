@@ -66,7 +66,7 @@ the perfect dominance graph associated with the ranking $[1,2,3,4,5,6]$ is shown
 %%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[ht]
 \centering
-\resizebox{0.2\textwidth}{!}{% Perfect Dominance
+\resizebox{0.18\textwidth}{!}{% Perfect Dominance
 \begin{tikzpicture}
 	\node[circle, shading=ball, ball color=gray, color=white] (1) at (0,2) {$1$};
 	\node[circle, shading=ball, ball color=gray, color=white] (2) at (1,1) {$2$};
@@ -165,7 +165,7 @@ Finally, if the matching distance is used to measure the variation, then there i
 %%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[ht]
 \centering
-\resizebox{\textwidth}{!}{%
+\resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{cccc}
 \textbf{Perfect Dominance} & \textbf{Perturbed Dominance} & \textbf{Perturbed Random} & \textbf{Nearly Disconnected} \\
 \resizebox{0.2\textwidth}{!}{% Perfect Dominance
@@ -660,7 +660,7 @@ We aspire to give a more specific description of $\alpha(\Gamma)$ and $\beta(\Ga
 Ideally, we would have a characterization result analogous to the spectral-degree characterization in Theorem 1.1. 
 To this end, we have started an investigation of the field of values of the matrix $Q^{T}LQ$, where $Q$ is defined as in the beginning of Section 2.
 After running some numerical experiments, the first thing we noticed is that $F(Q^{T}LQ)$ is an ellipse whenever $\Gamma$ is a perfect dominance graph.
-In the figure below, we display the field of values of $Q^{T}LQ$ for a perfect dominance graph on $3,4,5,6$ vertices.
+In Figure 3, we display the field of values of $Q^{T}LQ$ for a perfect dominance graph on $3$, $6$, $9$, and $12$ vertices.
 
 %%%%%%%%%%%%%%%%%%%%%%
 %			Figure 3				%
@@ -668,9 +668,42 @@ In the figure below, we display the field of values of $Q^{T}LQ$ for a perfect d
 \begin{figure}[ht]
 \centering
 \begin{tabular}{cc}
-
+\includegraphics[width=0.45\textwidth]{figures/nr-dom-ellipse-3.png}
+&
+\includegraphics[width=0.45\textwidth]{figures/nr-dom-ellipse-6.png} \\
+& \\
+\includegraphics[width=0.45\textwidth]{figures/nr-dom-ellipse-9.png}
+&
+\includegraphics[width=0.45\textwidth]{figures/nr-dom-ellipse-12.png} \\
 \end{tabular}
+\caption{$F(Q^{T}LQ)$ for Perfect Dominance Graphs.}
 \end{figure}
+
+Note that for a perfect dominance graph on $3$ vertices, the matrix $Q^{T}LQ$ is $2\times 2$.
+In particular, we have
+\begin{align*}
+Q^{T}LQ &= 
+			\begin{bmatrix}1/\sqrt{2} & -1/\sqrt{2} & 0 \\
+						1/\sqrt{6} & 1/\sqrt{6} & -2/\sqrt{6} \end{bmatrix}
+			\begin{bmatrix} 2 & -1 & -1 \\
+						0 & 1 & -1 \\
+						0 & 0 & 0 \end{bmatrix}
+			\begin{bmatrix}1/\sqrt{2} & 1/\sqrt{6} \\
+					-1/\sqrt{2} & 1/\sqrt{6} \\
+					0 & -2/\sqrt{6} \end{bmatrix} \\
+		&= \begin{bmatrix}2 & 0 \\ 1/\sqrt{3} & 1 \end{bmatrix}.
+\end{align*}
+The eigenvalues of $Q^{T}LQ$ are
+\[
+\lambda_{1}=1~\text{ and }~\lambda_{2}=2.
+\]
+Furthermore, the singular values of $Q^{T}LQ$ are
+\[
+\sigma_{1} = \sqrt{\frac{2}{3}\left(4+\sqrt{7}\right)}
+~\text{ and }~
+\sigma_{2} = \sqrt{\frac{2}{3}\left(4-\sqrt{7}\right)}
+\]
+Therefore, by the elliptical range theorem, $F(Q^{T}LQ)$ is an ellipse with foci at $1$ and $2$, and with a major axis of length $\sqrt{16/3 - 1 - 4}\approx 0.58$. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                 	   			Bibliography

@@ -105,5 +105,5 @@ def main(n):
                ncol=2, mode="expand", borderaxespad=0.)
     plt.show()
     
-for k in range(3,31):
+for k in range(3,13,3):
     main(k)
