@@ -53,7 +53,7 @@ def rankability():
     for k in range(len(years)):
         print('Year'+str(years[k])+': ')
         a = read_data_matrix(years[k])
-        f.write(str('%d' % years[k])+str(', %.15f' % specR(a))+str(', %.15f' % connR(a))+'\n')
+        f.write(str('%d' % years[k])+str(', %.4f' % specR(a))+str(', %.4f' % connR(a))+'\n')
         #print('specR = '+str('%.3f' % specR(a))+' and connR = '+str('%.3f' % connR(a))+'\n')
     f.close()
    
