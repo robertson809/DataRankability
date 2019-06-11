@@ -1,0 +1,18 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{Lan53}
+
+\bibitem[Lan53]{Landau1953}
+H.~G. Landau, \emph{On dominance relations and the structure of animal
+  societies: {III}}, Bull. Math. Biophys. \textbf{15} (1953), 143--148.
+
+\bibitem[Rat10]{Ratliff2010}
+T.~C. Ratliff, \emph{Lewis {C}arroll, voting, and the taxicab metric}, College
+  Math. J. \textbf{41} (2010), 303--311.
+
+\end{thebibliography}

@@ -56,7 +56,7 @@ This note is an introduction to a wonderful connection between the algebraic con
 %                                    				Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}	
-Recently, the problem of rankability of posed, which refers to a dataset's inherent ability to produce a meaningful ranking of its items~\cite{Anderson2018}.
+Recently, the problem of rankability was posed, which refers to a dataset's inherent ability to produce a meaningful ranking of its items~\cite{Anderson2018}.
 Given data that can be modeled as a binary directed graph, the idea is to measure how far that graph is from a \emph{perfect dominance graph}, i.e., an acyclic tournament graph.
 A perfect dominance graph represents an ideal situation for ranking as it is associated with a clear and unique ranking, e.g.,
 the perfect dominance graph associated with the ranking $[1,2,3,4,5,6]$ is shown in Figure~\ref{fig:dom}.
@@ -103,7 +103,7 @@ the perfect dominance graph associated with the ranking $[1,2,3,4,5,6]$ is shown
 \end{figure}
 
 Now, in theory, the rankability measure proposed in~\cite{Anderson2018} is simple.
-Let $k$ denote the minimum number of edge deletions or additions made to the given graph in order to obtain a perfect dominance graph.
+Let $k$ denote the minimum number of edge changes(additions or deletions) needed to obtain a perfect dominance graph.
 Given $k$ edge changes, denote by $p$ the number of perfect dominance graphs that can be obtained.
 Then, the rankability measure of the given dataset is defined by
 \begin{equation}\label{eq:simod-rank}
@@ -112,7 +112,7 @@ Then, the rankability measure of the given dataset is defined by
 where $k_{max}=(n^{2}-n)/2$ and $p_{max}=n!$.
 We denote this rankability measure by $\ipr$ since an integer program is used to compute $k$ and $p$. 
 
-This rankability measure is clearly expensive to compute (in fact, I believe it is NP Hard).
+This rankability measure is clearly expensive to compute; in fact, it is NP Hard.
 Therefore, even more recently, we proposed a cheaper rankability measure, which is motivated by a spectral-degree characterization of perfect dominance graphs.
 
 %%%%%%%%%%%%%%%%%%%%%%
@@ -128,7 +128,9 @@ and there exists a re-ordering of the vertices such that $d^{+}(i)=n-i$ for $i=1
 \end{theorem}
 
 Armed with this spectral-degree characterization, we propose the following measure of the rankability of data.
-Note that $\hd$ denotes the Hausdorff distance and the maximum upper bound for both $\hd{D}{S}$ and $\hd{L}{S}$ is $(n-1)$.
+Note that $\hd{A}{\tilde{A}}$ denotes the Hausdorff distance between the eigenvalues of $A$ and the eigenvalues of $\tilde{A}$. 
+
+denotes the Hausdorff distance and the maximum upper bound for both $\hd{D}{S}$ and $\hd{L}{S}$ is $(n-1)$.
 Therefore, the division by $2(n-1)$ is a normalization factor.
 Finally, note that $r$ ranges between $0$ and $1$, which indicates a transition between ill-rankable and well-rankable data. 
 
@@ -420,36 +422,48 @@ $\ipr = 0.9900$ & $\ipr = 0.2700$ & $\ipr = 0.0000$ & $\ipr = 0.0000$.
 \end{figure}
 
 In Table~\ref{tab:big-east}, we record the rankability measure for each year of the NCAA Big East Football Conference from 1995 to 2012.
-It is important to note that there is still a strong correlation to the rankability measure $\ipr$.
-Moreover, there is a strong correlation to the predictability of Colley and Massey rankings~\cite{Colley2002,Massey1997}.
-Hence, these rankability measures give a good indication of the inherent ability of the this data to produce a meaningful ranking of its items.
+For comparison purposes, we also provide the predictability of Colley and Massey rankings~\cite{Colley2002,Massey1997} and the number of cycles in the corresponding graph. 
+We note that the Pearson correlation coefficients between $\specr$ and Massey is $0.719$, between $\specr$ and Colley is $0.781$, and between $\specr$ and the number of cycles is $-0.826$. 
+Hence, the $\specr$ rankability measure is giving a good indication of the inherent ability of this data to produce a meaningful ranking of its items. 
+
 %%%%%%%%%%%%%%%%%%%%%%
 %			Table 1				%
 %%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
 \centering
-\begin{tabular}{|| c | c || c | c ||}
+\resizebox{0.5\textwidth}{!}{%
+\begin{tabular}{|| c | c | c | c | c || }
 \hline
-Year & $\specr$ & Year & $\specr$ \\
+Year & $\specr$ & Massey & Colley & Cycles \\
 \hline
-1995 & 0.8571 & 2004 & 0.6615\\
-1996 & 0.8571 & 2005 & 0.8375\\
-1997 & 0.8149 & 2006 & 0.8049\\
-1998 & 0.8169 & 2007 & 0.6841\\
-1999 & 0.8571 & 2008 & 0.8049\\
-2000 & 0.8571 & 2009 & 0.8571\\
-2001 & 0.8571 & 2010 & 0.7082\\ 
-2002 & 0.8571 & 2011 & 0.7143\\
-2003 & 0.8571 & 2012 & 0.7143\\
+1995 & 0.857 & 0.893 & 0.926 & 7 \\
+1996 & 0.857 & 0.857 & 0.929 & 1 \\
+1997 & 0.815 & 0.679 & 0.704 & 62 \\
+1998 & 0.817 & 0.750 & 0.917 & 30 \\
+1999 & 0.857 & 0.821 & 0.857 & 23 \\
+2000 & 0.857 & 0.929 & 0.929 & 3 \\
+2001 & 0.857 & 0.857 & 0.963 & 1 \\
+2002 & 0.857 & 0.893 & 0.962 & 3 \\
+2003 & 0.857 & 0.786 & 0.893 & 18 \\
+2004 & 0.662 & 0.762 & 0.750 & 48 \\
+2005 & 0.838 & 0.821 & 0.880 & 16 \\
+2006 & 0.805 & 0.750 & 0.778 & 45 \\
+2007 & 0.684 & 0.643 & 0.692 & 205 \\
+2008 & 0.805 & 0.714 & 0.846 & 43 \\
+2009 & 0.857 & 0.786 & 0.888 & 26 \\
+2010 & 0.708 & 0.750 & 0.808 & 174 \\
+2011 & 0.714 & 0.643 & 0.792 & 125 \\
+2012 & 0.714 & 0.643 & 0.720 & 111 \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
 \caption{Big East Football Rankability}
 \label{tab:big-east}
 \end{table}
 
-However, it is also clear from these measures that $\specr$ has trouble differentiation between certain years of the Big East data. 
+However, it is also clear from these measures that $\specr$ has trouble differentiating between certain years of the Big East data. 
 This motivates our investigation of other graph properties that can be used to measure the rankability of data. 
-In particular, we have used the algebraic connectivity of a graph to differentiate between years of the big east data and identify unique years as the least and most rankable. 
+In particular, we have had success using the algebraic connectivity of a graph to differentiate between years of Big East data and identify a unique least and most rankable years.
 Now, our goal is to provide a rigorous theoretical justification for the use of the algebraic connectivity, just as was done with the spectral-degree characteristic in the Pre-Print. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -533,6 +547,8 @@ and
 \]
 \end{proposition}
 
+This leads to our first result on the algebraic connectivity of perfect dominance graphs.
+
 %%%%%%%%%%%%%%%%%%%%%%
 %			Theorem 2.3			%
 %%%%%%%%%%%%%%%%%%%%%%
@@ -588,6 +604,8 @@ If $\lambda$ is an eigenvalue of $L$ not corresponding to the eigenvector $e$, t
 \]
 \end{proposition}
 
+This lead to our next result on the algebraic connectivity of perfect dominance graphs.
+
 %%%%%%%%%%%%%%%%%%%%%%
 %			Theorem 2.6			%
 %%%%%%%%%%%%%%%%%%%%%%
@@ -608,7 +626,7 @@ where $0$ is the only eigenvalue corresponding to the eigenvector $e$.
 The result follows from Proposition 2.5.
 \end{proof}
 
-We conclude this section with the following corollary.
+We conclude this section with the following corollary, which provides bounds on the algebraic connectivity of perfect dominance graphs. 
 
 %%%%%%%%%%%%%%%%%%%%%%
 %			Corollary 2.7			%
@@ -658,8 +676,8 @@ since $\alpha(\Gamma)\leq 1$.
 \subsection{The Field of Values}
 We aspire to give a more specific description of $\alpha(\Gamma)$ and $\beta(\Gamma)$ when $\Gamma$ is a perfect dominance graph. 
 Ideally, we would have a characterization result analogous to the spectral-degree characterization in Theorem 1.1. 
-To this end, we have started an investigation of the field of values of the matrix $Q^{T}LQ$, where $Q$ is defined as in the beginning of Section 2.
-After running some numerical experiments, the first thing we noticed is that $F(Q^{T}LQ)$ is an ellipse whenever $\Gamma$ is a perfect dominance graph.
+To this end, we started an investigation on the field of values of the matrix $Q^{T}LQ$, where $Q$ is defined as in the beginning of Section 2.
+After running several numerical experiments, we noticed that $F(Q^{T}LQ)$ is an ellipse whenever $\Gamma$ is a perfect dominance graph.
 In Figure 3, we display the field of values of $Q^{T}LQ$ for a perfect dominance graph on $3$, $6$, $9$, and $12$ vertices.
 
 %%%%%%%%%%%%%%%%%%%%%%
@@ -703,7 +721,19 @@ Furthermore, the singular values of $Q^{T}LQ$ are
 ~\text{ and }~
 \sigma_{2} = \sqrt{\frac{2}{3}\left(4-\sqrt{7}\right)}
 \]
-Therefore, by the elliptical range theorem, $F(Q^{T}LQ)$ is an ellipse with foci at $1$ and $2$, and with a major axis of length $\sqrt{16/3 - 1 - 4}\approx 0.58$. 
+Therefore, by the elliptical range theorem~\cite{Li1996}, $F(Q^{T}LQ)$ is an ellipse with foci at $1$ and $2$, and with a major axis of length $\sqrt{16/3 - 1 - 4}\approx 0.58$. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                    				Future Research
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Future Research}
+We are interested in proving that the field of values of $Q^{T}LQ$ is always an ellipse when $\Gamma$ is a perfect dominance graph. 
+The first step is to prove it when $\Gamma$ is a perfect dominance on $4$ vertices and, hence, $Q^{T}LQ$ is $3\times 3$.
+To generalize this result, we may find it useful to look into the many proofs of the elliptical range theorem for ideas.
+
+We hope that a proof of this result will lead to additional information about the algebraic connectivity of perfect dominance graphs.
+Ideally, this information will lead to another characterization and further justification of its use as a measure of the rankability of data. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                 	   			Bibliography

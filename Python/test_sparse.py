@@ -10,7 +10,7 @@ import itertools
 import numpy as np
     
 ### test variables
-n = 50
+n = 40 
 kmax = n**2-n
 itmax = 10
 results = np.zeros(itmax)
@@ -30,10 +30,10 @@ for k in range(kmax+1):
         for i in range(k):
             b[rsample[i][0],rsample[i][1]] = 1.
         # compute rankability
-        results[it,0] = specR(b)
+        results[it] = specR(b)
     # store averages
-    spec.append(sum(results[:,0])/itmax)
-    sparse.append(k/n**2)
+    spec.append(sum(results)/itmax)
+    sparse.append(k*1.0/n**2)
     
 ### plot results
 plt.plot(sparse,spec,label='specR')
