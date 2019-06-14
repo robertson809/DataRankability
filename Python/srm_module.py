@@ -115,6 +115,26 @@ def matchR(a):
     return 1. - ((Matching(e,s)+Matching(x,s))/(2*(n-1)))
     
 ###############################################
+###             spec2R                      ###
+###############################################
+#   Computes Spectral Rankability Measure for
+#   double round robins.
+###############################################
+def spec2R(a):
+    """Computes Spectral Rankability Measure for double round robins."""
+    # given graph Laplacian
+    n = len(a)
+    x = np.array([np.sum(a[i,:]) for i in range(n)])
+    d = np.diag(x)
+    l = d - a;
+    # perfect dominance graph spectrum and out-degree
+    s = np.array([2*(n-k) for k in range(1,n+1)])
+    # eigenvalues of given graph Laplacian
+    e = np.linalg.eigvals(l)
+    # rankability measure
+    return 1. - ((Hausdorff(e,s)+Hausdorff(x,s))/(4*(n-1)))
+    
+###############################################
 ###             specR                       ###
 ###############################################
 #   Computes Spectral Rankability Measure.

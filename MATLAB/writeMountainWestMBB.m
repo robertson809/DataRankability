@@ -1,6 +1,6 @@
 function writeMountainWestMBB()
-A = zeros(14,2);
-for i=2002:2015
+A = zeros(18,2);
+for i=2002:2019
     gamefilename = strcat('../data_files/ConferencesMBB/Mountain_West/', int2str(i),...
         'games.txt');
     teamfilename = strcat('../data_files/ConferencesMBB/Mountain_West/', int2str(i),...

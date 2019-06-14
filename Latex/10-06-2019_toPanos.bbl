@@ -1,0 +1,36 @@
+\begin{thebibliography}{1}
+
+\bibitem{Anderson2018}
+{\sc P.~E. Anderson, T.~P. Chartier, and A.~N. Langville}, {\em The rankability
+  of data}, SIMODS,  (2018).
+
+\bibitem{Colley2002}
+{\sc W.~N. Colley}, {\em Colley's {B}ias {F}ree {M}atrix {R}ankings}.
+\newblock \url{www.colleyrankings.com}, 2002.
+
+\bibitem{Fiedler1973}
+{\sc M.~Fiedler}, {\em Algebraic connectivity of graphs}, Czechoslovak
+  Mathematical Journal, 23 (1973), pp.~298--305.
+
+\bibitem{Horn1991}
+{\sc R.~A. Horn and C.~R. Johnson}, {\em Topics in {M}atrix {A}nalysis},
+  Cambridge University Press, New York, NY, 1991.
+
+\bibitem{Horn2013}
+\leavevmode\vrule height 2pt depth -1.6pt width 23pt, {\em Matrix {A}nalysis},
+  Cambridge University Press, New York, NY, 2nd~ed., 2013.
+
+\bibitem{Li1996}
+{\sc C.-K. Li}, {\em A simple proof of the elliptical range theorem}, Proc.
+  Amer. Math. Soc., 127 (1986), pp.~1985--1986.
+
+\bibitem{Massey1997}
+{\sc K.~Massey}, {\em Statistical modelis applied to the rating of sports
+  teams}.
+\newblock Bachelor's thesis, Bluefield College, 1997.
+
+\bibitem{Wu2005-1}
+{\sc C.~W. Wu}, {\em Algebraic connectivity of directed graphs}, Linear
+  Multilinear Algebra, 53 (2005), pp.~203--223.
+
+\end{thebibliography}
