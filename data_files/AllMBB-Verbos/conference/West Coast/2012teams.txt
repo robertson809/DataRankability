@@ -1,9 +1,0 @@
-   1, BYU
-   2, Gonzaga
-   3, Loy_Marymount
-   4, Pepperdine
-   5, Portland
-   6, San_Diego
-   7, San_Francisco
-   8, Santa_Clara
-   9, St_Mary's_CA

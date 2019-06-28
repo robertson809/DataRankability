@@ -1,0 +1,6 @@
+   1, Boise_St
+   2, Idaho
+   3, Nevada
+   4, New_Mexico_St
+   5, North_Texas
+   6, Utah_St

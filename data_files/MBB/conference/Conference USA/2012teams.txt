@@ -1,0 +1,12 @@
+   1, East_Carolina
+   2, Houston
+   3, Marshall
+   4, Memphis
+   5, Rice
+   6, SMU
+   7, Southern_Miss
+   8, Tulane
+   9, Tulsa
+  10, UAB
+  11, UCF
+  12, UTEP

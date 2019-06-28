@@ -1,0 +1,10 @@
+   1, Appalachian_St
+   2, Arkansas_St
+   3, Coastal_Car
+   4, Ga_Southern
+   5, Georgia_St
+   6, Louisiana
+   7, South_Alabama
+   8, Texas_St
+   9, Troy
+  10, ULM

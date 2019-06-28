@@ -1,0 +1,8 @@
+   1, Fresno_St
+   2, Hawaii
+   3, Idaho
+   4, Louisiana_Tech
+   5, Nevada
+   6, New_Mexico_St
+   7, San_Jose_St
+   8, Utah_St

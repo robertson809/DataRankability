@@ -1,0 +1,8 @@
+   1, Arkansas_St
+   2, Georgia_St
+   3, Louisiana
+   4, South_Alabama
+   5, Texas_St
+   6, Troy
+   7, ULM
+   8, WKU

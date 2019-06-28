@@ -1,0 +1,10 @@
+   1, Arkansas_St
+   2, Louisiana
+   3, Louisiana_Tech
+   4, N_Illinois
+   5, Nevada
+   6, New_Mexico_St
+   7, Pacific
+   8, San_Jose_St
+   9, UNLV
+  10, Utah_St

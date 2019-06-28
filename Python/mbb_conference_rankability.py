@@ -2,7 +2,7 @@
 #
 # Author: Thomas R. Cameron
 # Date: 6/15/2019
-from srm_module import specR, spec2R
+from srm_module import specR
 import numpy as np
 
 #####################################################
@@ -10,7 +10,7 @@ import numpy as np
 #####################################################
 def read_data(conf,year):
     # open games file
-    f = open('../data_files/AllMBB-Verbos/conference/'+conf+'/'+str(year)+'games.txt')
+    f = open('../data_files/AllMBB/conference/'+conf+'/'+str(year)+'games.txt')
     # read lines
     lineList = f.readlines()
     # store info
@@ -52,7 +52,7 @@ def read_data(conf,year):
 #####################################################
 def main():
     # open file
-    f = open("mbb_conference_rankability.csv","w+")
+    f = open("csv/mbb_conference_rankability.csv","w+")
     # store conferences
     conferences = ['America East','Atlantic 10','Atlantic Coast','Atlantic Sun','Big 10','Big 12','Big East','Big Sky',
                     'Big South','Big West','Colonial','Conference USA','Horizon',

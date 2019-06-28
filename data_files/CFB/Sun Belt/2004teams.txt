@@ -1,0 +1,9 @@
+   1, Arkansas_St
+   2, Idaho
+   3, Louisiana
+   4, MTSU
+   5, New_Mexico_St
+   6, North_Texas
+   7, Troy
+   8, ULM
+   9, Utah_St

@@ -1,0 +1,12 @@
+   1, Cincinnati
+   2, Connecticut
+   3, East_Carolina
+   4, Houston
+   5, Memphis
+   6, Navy
+   7, SMU
+   8, South_Florida
+   9, Temple
+  10, Tulane
+  11, Tulsa
+  12, UCF

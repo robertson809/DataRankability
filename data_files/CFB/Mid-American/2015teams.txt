@@ -1,0 +1,13 @@
+   1, Akron
+   2, Ball_St
+   3, Bowling_Green
+   4, Buffalo
+   5, C_Michigan
+   6, E_Michigan
+   7, Kent
+   8, Massachusetts
+   9, Miami_OH
+  10, N_Illinois
+  11, Ohio
+  12, Toledo
+  13, W_Michigan

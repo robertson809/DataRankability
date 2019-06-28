@@ -1,0 +1,8 @@
+   1, Colorado
+   2, Iowa_St
+   3, Kansas
+   4, Kansas_St
+   5, Missouri
+   6, Nebraska
+   7, Oklahoma
+   8, Oklahoma_St

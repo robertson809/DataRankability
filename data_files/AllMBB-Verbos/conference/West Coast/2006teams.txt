@@ -1,8 +1,0 @@
-   1, Gonzaga
-   2, Loy_Marymount
-   3, Pepperdine
-   4, Portland
-   5, San_Diego
-   6, San_Francisco
-   7, Santa_Clara
-   8, St_Mary's_CA

@@ -1,0 +1,10 @@
+   1, Arizona
+   2, Arizona_St
+   3, California
+   4, Oregon
+   5, Oregon_St
+   6, Stanford
+   7, UCLA
+   8, USC
+   9, Washington
+  10, Washington_St

@@ -1,0 +1,10 @@
+   1, Baylor
+   2, Iowa_St
+   3, Kansas
+   4, Kansas_St
+   5, Oklahoma
+   6, Oklahoma_St
+   7, TCU
+   8, Texas
+   9, Texas_Tech
+  10, West_Virginia

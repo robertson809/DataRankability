@@ -1,0 +1,7 @@
+   1, Idaho
+   2, Louisiana_Tech
+   3, New_Mexico_St
+   4, San_Jose_St
+   5, Texas_St
+   6, UT_San_Antonio
+   7, Utah_St

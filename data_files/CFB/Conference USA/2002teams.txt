@@ -1,0 +1,10 @@
+   1, Army
+   2, Cincinnati
+   3, East_Carolina
+   4, Houston
+   5, Louisville
+   6, Memphis
+   7, Southern_Miss
+   8, TCU
+   9, Tulane
+  10, UAB

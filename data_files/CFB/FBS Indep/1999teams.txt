@@ -1,0 +1,7 @@
+   1, Louisiana
+   2, Louisiana_Tech
+   3, MTSU
+   4, Navy
+   5, Notre_Dame
+   6, UCF
+   7, ULM

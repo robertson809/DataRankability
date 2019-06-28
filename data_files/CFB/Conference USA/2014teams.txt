@@ -1,0 +1,13 @@
+   1, FL_Atlantic
+   2, Florida_Intl
+   3, Louisiana_Tech
+   4, Marshall
+   5, MTSU
+   6, North_Texas
+   7, Old_Dominion
+   8, Rice
+   9, Southern_Miss
+  10, UAB
+  11, UT_San_Antonio
+  12, UTEP
+  13, WKU

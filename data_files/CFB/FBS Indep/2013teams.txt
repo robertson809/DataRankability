@@ -1,0 +1,6 @@
+   1, Army
+   2, BYU
+   3, Idaho
+   4, Navy
+   5, New_Mexico_St
+   6, Notre_Dame

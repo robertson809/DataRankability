@@ -1,0 +1,11 @@
+   1, Illinois
+   2, Indiana
+   3, Iowa
+   4, Michigan
+   5, Michigan_St
+   6, Minnesota
+   7, Northwestern
+   8, Ohio_St
+   9, Penn_St
+  10, Purdue
+  11, Wisconsin

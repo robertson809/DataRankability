@@ -1,0 +1,14 @@
+   1, Baltimore
+   2, Buffalo
+   3, Cincinnati
+   4, Denver
+   5, Indianapolis
+   6, Kansas_City
+   7, LA_Chargers
+   8, Miami
+   9, New_England
+  10, NY_Jets
+  11, Oakland
+  12, Pittsburgh
+  13, Seattle
+  14, Tennessee

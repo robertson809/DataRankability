@@ -1,0 +1,15 @@
+   1, Arizona
+   2, Atlanta
+   3, Carolina
+   4, Chicago
+   5, Dallas
+   6, Detroit
+   7, Green_Bay
+   8, LA_Rams
+   9, Minnesota
+  10, New_Orleans
+  11, NY_Giants
+  12, Philadelphia
+  13, San_Francisco
+  14, Tampa_Bay
+  15, Washington

@@ -1,0 +1,6 @@
+   1, Cincinnati
+   2, Houston
+   3, Louisville
+   4, Memphis
+   5, Southern_Miss
+   6, Tulane

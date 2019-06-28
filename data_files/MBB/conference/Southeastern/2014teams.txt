@@ -1,0 +1,14 @@
+   1, Alabama
+   2, Arkansas
+   3, Auburn
+   4, Florida
+   5, Georgia
+   6, Kentucky
+   7, LSU
+   8, Mississippi
+   9, Mississippi_St
+  10, Missouri
+  11, South_Carolina
+  12, Tennessee
+  13, Texas_A&M
+  14, Vanderbilt

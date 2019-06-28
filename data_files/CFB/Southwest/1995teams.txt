@@ -1,0 +1,8 @@
+   1, Baylor
+   2, Houston
+   3, Rice
+   4, SMU
+   5, TCU
+   6, Texas
+   7, Texas_A&M
+   8, Texas_Tech

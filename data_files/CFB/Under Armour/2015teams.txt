@@ -1,0 +1,15 @@
+   1, Auburn
+   2, Boston_College
+   3, Cincinnati
+   4, Colorado_St
+   5, Hawaii
+   6, Maryland
+   7, Navy
+   8, Northwestern
+   9, Notre_Dame
+  10, South_Carolina
+  11, South_Florida
+  12, Temple
+  13, Texas_Tech
+  14, Toledo
+  15, Utah

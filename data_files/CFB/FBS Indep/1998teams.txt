@@ -1,0 +1,8 @@
+   1, Arkansas_St
+   2, Louisiana
+   3, Louisiana_Tech
+   4, Navy
+   5, Notre_Dame
+   6, UAB
+   7, UCF
+   8, ULM

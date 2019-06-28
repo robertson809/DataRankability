@@ -1,0 +1,14 @@
+   1, East_Carolina
+   2, FL_Atlantic
+   3, Florida_Intl
+   4, Louisiana_Tech
+   5, Marshall
+   6, MTSU
+   7, North_Texas
+   8, Rice
+   9, Southern_Miss
+  10, Tulane
+  11, Tulsa
+  12, UAB
+  13, UT_San_Antonio
+  14, UTEP

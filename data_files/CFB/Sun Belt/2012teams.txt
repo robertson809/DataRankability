@@ -1,0 +1,10 @@
+   1, Arkansas_St
+   2, FL_Atlantic
+   3, Florida_Intl
+   4, Louisiana
+   5, MTSU
+   6, North_Texas
+   7, South_Alabama
+   8, Troy
+   9, ULM
+  10, WKU
