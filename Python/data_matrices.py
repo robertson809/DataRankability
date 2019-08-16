@@ -3,7 +3,23 @@
 # Author: Thomas R. Cameron
 # Date: 6/23/2019
 import os
+import errno
 import numpy as np
+
+#####################################################
+#                 MKDIR_P                           # 
+#####################################################
+#  Creates directory in Write Data function so that
+#   Python 2.7 can be used.
+#####################################################
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
 
 #####################################################
 #                 Read Data                         # 
@@ -83,7 +99,8 @@ def Read_Data(sport,conf,year):
 #   respective conference and year folder. 
 #####################################################
 def Write_Data(sport,conf,year,num,d):
-    os.makedirs(os.path.dirname('DataMatrices/'+sport+'/'+conf+'/'),exist_ok=True)
+    #os.makedirs(os.path.dirname('DataMatrices/'+sport+'/'+conf+'/'),exist_ok=True)
+    mkdir_p('DataMatrices/'+sport+'/'+conf+'/')
     f = open('DataMatrices/'+sport+'/'+conf+'/'+str(year)+'d'+str(num)+'Matrix.csv','w+')
     n = len(d)
     for i in range(n):
@@ -91,6 +108,7 @@ def Write_Data(sport,conf,year,num,d):
         for j in range(n-1):
             f.write(str('%.2f' % d[i,j])+', ')
         # last entry
+        j = n-1
         f.write(str('%.2f' % d[i,j])+'\n')
     # close file
     f.close()
@@ -143,6 +161,20 @@ def main():
         Write_Data('CFB','Big East',year,2,d2)
         Write_Data('CFB','Big East',year,3,d3)
         Write_Data('CFB','Big East',year,4,d4)
+    # Mid-American
+    for year in range(1995,2019):
+        d1, d2, d3, d4 = Read_Data('CFB','Mid-American',year)
+        Write_Data('CFB','Mid-American',year,1,d1)
+        Write_Data('CFB','Mid-American',year,2,d2)
+        Write_Data('CFB','Mid-American',year,3,d3)
+        Write_Data('CFB','Mid-American',year,4,d4)
+    # Mountain West
+    for year in range(1999,2019):
+        d1, d2, d3, d4 = Read_Data('CFB','Mountain West',year)
+        Write_Data('CFB','Mountain West',year,1,d1)
+        Write_Data('CFB','Mountain West',year,2,d2)
+        Write_Data('CFB','Mountain West',year,3,d3)
+        Write_Data('CFB','Mountain West',year,4,d4)
     # Pac 12
     for year in range(2013,2019):
         d1, d2, d3, d4 = Read_Data('CFB','Pac 12',year)

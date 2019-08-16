@@ -10,7 +10,7 @@ import numpy as np
 #####################################################
 def read_data(conf,year):
     # open games file
-    f = open('../data_files/AllMBB/conference/'+conf+'/'+str(year)+'games.txt')
+    f = open('../data_files/MBB/conference/'+str(conf)+'/'+str(year)+'games.txt')
     # read lines
     lineList = f.readlines()
     # store info

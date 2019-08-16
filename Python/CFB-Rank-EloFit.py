@@ -1,4 +1,5 @@
 # CFB-Rank-EloFit: Rankability Measures for CFB conferences and Comparison to the Elo ranking fit
+
 #
 # Author: Thomas R. Cameron
 # Date: 6/25/2019
@@ -138,6 +139,10 @@ def Main():
     # open files
     f1 = open('csv/CFB-Rank-EloFit-Rounds.csv','w+')
     f2 = open('csv/CFB-Rank-EloFit-Summary.csv','w+')
+    # rankability and predictability
+    rank = []
+    forwPred = []
+    backPred = []
     
     # Atlantic Coast
     print('Atlantic Coast: ')
@@ -153,12 +158,16 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('Atlantic Coast',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # Big East
     print('Big East: ')
@@ -174,12 +183,16 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('Big East',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # Mountain West
     print('Mountain West: ')
@@ -195,16 +208,25 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('Mountain West',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # close files
     f1.close()
     f2.close()
+    
+    # complete correlation summary
+    print('Complete Summary: ')
+    print('\tforw_pred corr = %.4f' % np.corrcoef(rank,forwPred)[0,1])
+    print('\tback_pred corr = %.4f' % np.corrcoef(rank,backPred)[0,1])
     
 
 # call Main

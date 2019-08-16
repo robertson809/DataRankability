@@ -138,6 +138,11 @@ def Main():
     # open files
     f1 = open('csv/MBB-Rank-EloFit-Rounds.csv','w+')
     f2 = open('csv/MBB-Rank-EloFit-Summary.csv','w+')
+    # rankability and predictability
+    rank = []
+    forwPred = []
+    backPred = []
+    
     # America East
     print('America East: ')
     x = []; y = []; z = []
@@ -152,12 +157,16 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('America East',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # Big West
     print('Big West: ')
@@ -173,33 +182,16 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('Big West',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
-    
-    # Horizon
-    print('Horizon: ')
-    x = []; y = []; z = []
-    f1.write('Horizon,Year,Round,Rank,Forw-Pred\n')
-    f2.write('Horizon,Year,Rank,Forw-Pred,Back-Pred\n')
-    for year in range(2002,2020):
-        f1.write(',%d,,,\n' % year)
-        f2.write(',%d' % year)
-        adj, elo_rating, forw_pred, rnd = Read_Data('Horizon',year)
-        numRounds = len(rnd)
-        for k in range(numRounds):
-            f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
-        # year summary
-        x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
-        z.append(Back_Pred('Horizon',year,elo_rating[-1]))
-        f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
-    # correlation between year summary data
-    print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
-    print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # Ivy League
     print('Ivy League: ')
@@ -215,33 +207,16 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('Ivy League',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
-    
-    # Missouri Val
-    print('Missouri Val: ')
-    x = []; y = []; z = []
-    f1.write('Missouri Val,Year,Round,Rank,Forw-Pred\n')
-    f2.write('Missouri Val,Year,Rank,Forw-Pred,Back-Pred\n')
-    for year in range(2002,2020):
-        f1.write(',%d,,,\n' % year)
-        f2.write(',%d' % year)
-        adj, elo_rating, forw_pred, rnd = Read_Data('Missouri Val',year)
-        numRounds = len(rnd)
-        for k in range(numRounds):
-            f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
-        # year summary
-        x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
-        z.append(Back_Pred('Missouri Val',year,elo_rating[-1]))
-        f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
-    # correlation between year summary data
-    print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
-    print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # Patriot League
     print('Patriot League: ')
@@ -257,33 +232,16 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('Patriot League',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
-    
-    # Southwestern AC
-    print('Southwestern AC: ')
-    x = []; y = []; z = []
-    f1.write('Southwestern AC,Year,Round,Rank,Forw-Pred\n')
-    f2.write('Southwestern AC,Year,Rank,Forw-Pred,Back-Pred\n')
-    for year in range(2002,2020):
-        f1.write(',%d,,,\n' % year)
-        f2.write(',%d' % year)
-        adj, elo_rating, forw_pred, rnd = Read_Data('Southwestern AC',year)
-        numRounds = len(rnd)
-        for k in range(numRounds):
-            f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
-        # year summary
-        x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
-        z.append(Back_Pred('Southwestern AC',year,elo_rating[-1]))
-        f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
-    # correlation between year summary data
-    print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
-    print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # West Coast
     print('West Coast: ')
@@ -299,17 +257,25 @@ def Main():
             f1.write(',,%d,%.4f,%.4f\n' % (k+1,specR(adj[k]),forw_pred[k]/float(rnd[k][1]-rnd[k][0]+1)))
         # year summary
         x.append(specR(adj[-1]))
-        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[0][1]+1))
+        y.append(sum(forw_pred[1:numRounds])/float(rnd[-1][1]-rnd[1][0]+1))
         z.append(Back_Pred('West Coast',year,elo_rating[-1]))
         f2.write(',%.4f,%.4f,%.4f\n' % (x[-1],y[-1],z[-1]))
     # correlation between year summary data
     print('\tforw_pred corr = %.4f' % np.corrcoef(x,y)[0,1])
     print('\tback_pred corr = %.4f' % np.corrcoef(x,z)[0,1])
+    # update rank, forwPred, and backPred
+    rank = rank + x
+    forwPred = forwPred + y
+    backPred = backPred + z
     
     # close files
     f1.close()
     f2.close()
     
+    # complete correlation summary
+    print('Complete Summary: ')
+    print('\tforw_pred corr = %.4f' % np.corrcoef(rank,forwPred)[0,1])
+    print('\tback_pred corr = %.4f' % np.corrcoef(rank,backPred)[0,1])
     
 # call Main
 Main()

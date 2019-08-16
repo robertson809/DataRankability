@@ -54,7 +54,7 @@ def main():
     # open file
     f = open("csv/cfb_conference_rankability.csv","w+")
     # store conferences
-    conferences = ['Big 12','FBS Indep','Mid-American']
+    conferences = ['Big 12']
     # write conferences in first row of file
     for k in range(len(conferences)):
         f.write(conferences[k]+',,,')
@@ -66,7 +66,7 @@ def main():
         f.write(str(',%d'%years[i]))
         for j in range(len(conferences)):
             adj = read_data(conferences[j],years[i])
-            f.write(str(',%.15f' % specR(adj))+str(',%.15f' % matchR(adj)))
+            f.write(str(',%.15f' % specR(adj))+str(',%.15f' % specR(adj)))
         f.write('\n')
 
 main()

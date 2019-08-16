@@ -51,13 +51,13 @@ def algCon(l,q):
     return np.amin(e)
     
 ###############################################
-###             Main                        ###
+###             domNR                       ###
 ###############################################
 #   Creates dominance graph of size n and plots
 #   its numerical range along with information
 #   regarding the foci and major and minor axis.
 ###############################################
-def main(n):
+def dom_nr(n):
     """Creates dominance graph of size n and plots its numerical range along with informationregarding the foci and major and minor axis."""
     # perfect dominance graph on n vertices
     l=np.zeros((n,n))
@@ -73,10 +73,12 @@ def main(n):
         q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
     # projection transformation
     a = np.dot(np.transpose(q), np.dot(l,q))
+    print(np.dot(np.transpose(a),a))
     # plt of numerical range and eigenvalues
     fig = nr(a)
     # algebraic connectivity
     alpha = algCon(l,q)
+    print(alpha)
     # semi-major axis
     c = n/2.0
     smajor = c - alpha
@@ -105,5 +107,77 @@ def main(n):
                ncol=2, mode="expand", borderaxespad=0.)
     plt.show()
     
-for k in range(3,13,3):
-    main(k)
+###############################################
+###             specDomNR                   ###
+###############################################
+def specDomNR():
+    # graph Laplacian
+    l = np.array([[1.,0,-1],[-1,1.,0],[-1,0,1.]])
+    # orthonormal matrix q
+    n = 3
+    q = np.zeros((n,n-1))
+    for j in range(n-1):
+        q[0:j+1,j] = 1
+        q[j+1,j] = -(j+1)
+        q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
+    # projection transformation
+    a = np.dot(np.transpose(q), np.dot(l,q))
+    print(np.dot(np.transpose(a),a))
+    # plt of numerical range and eigenvalues
+    fig = nr(a)
+    # algebraic connectivity
+    alpha = algCon(l,q)
+    print(alpha)
+    # semi-major axis
+    c = n/2.0
+    smajor = c - alpha
+    # semi-minor axis
+    e = np.linalg.eigvals(0.5*np.dot(np.transpose(q), np.dot(l-np.transpose(l),q)))
+    sminor = max(np.imag(e))
+    # foci
+    x = sqrt(smajor**2-sminor**2)
+    f1 = c - x
+    f2 = c + x
+    # plot minor axes
+    sline = np.linspace(0,sminor)
+    zline = [c for k in range(len(sline))]
+    plt.plot(zline,sline,'g',label="sminor = %.2f"%sminor,alpha=0.5,figure=fig)
+    # plot major axes
+    xline = np.linspace(f1,n/2.0)
+    m = sminor/x
+    dx = xline[1]-xline[0]
+    yline = [m*dx*k for k in range(len(xline))]
+    plt.plot(xline,yline,'r',label="smajor = %.2f"%smajor,alpha=0.5,figure=fig)
+    # plot foci
+    plt.plot(f1,0,'b*',label="foci1 = %.5f"%f1,alpha=0.5,figure=fig)
+    plt.plot(f2,0,'b*',label="foci2 = %.5f"%f2,alpha=0.5,figure=fig)
+    # plt legends
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+               ncol=2, mode="expand", borderaxespad=0.)
+    plt.show()
+    
+###############################################
+###             Imploding Start NR (ISNR)   ###
+###############################################
+def ISNR():
+    # graph Laplacian
+    l = np.array([[0.,0,0,0],[-1,1.,0,0],[-1,0,1.,0],[-1,0,0,1.]])
+    # orthonormal matrix q
+    n = 4
+    q = np.zeros((n,n-1))
+    for j in range(n-1):
+        q[0:j+1,j] = 1
+        q[j+1,j] = -(j+1)
+        q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
+    # projection transformation
+    a = np.dot(np.transpose(q), np.dot(l,q))
+    print(a)
+    # plt of numerical range and eigenvalues
+    fig = nr(a)
+    plt.show()
+
+# Q NR of Complete Dominance
+#dom_nr(3)
+# Q NR of non-complete dominance with same eigenvalues
+#specDomNR()
+ISNR()
