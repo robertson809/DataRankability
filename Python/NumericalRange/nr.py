@@ -74,7 +74,7 @@ def simod_graphs():
             q[j+1,j] = -(j+1)
             q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
         # projection transformation
-        l = 0.5*np.dot(np.transpose(q), np.dot(l,q))
+        l = np.dot(np.transpose(q), np.dot(l,q))
         # numerical range of l
         nr(l)
         

@@ -181,7 +181,7 @@ def Main():
     f1.write('Year, Round, Rank, Forw_Pred \n')
     f2.write('Year, Rank, Forw_Pred, Back_Pred \n')
     x = []; y = []; z = []
-    for year in range(2013,2019):
+    for year in range(2013,2020):
         adj, elo_rating, forw_pred, numPlayers, numRounds = Read_Data(year)
         f1.write('%d,,,\n' % year)
         f2.write('%d' % year)
