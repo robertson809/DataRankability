@@ -1,4 +1,4 @@
-function [kstar,kworst]=HillsideHISTbruteforce(D)
+function [kstar,kworst,p]=HillsideHISTbruteforce(D)
 
 % INPUT: D matrix of weighted dominance relations
 % OUTPUT: hillside1 = k* (optimal k value =  minimum number of hillside
@@ -31,11 +31,11 @@ end
 fitness=-fitness;
 kstar=min(fitness);
 kworst=max(fitness);
-% r_k=(kworst-kstar)/(kworst+kstar);
-% nbins=kworst-kstar+1;
-% figure(1)
-% histogram(fitness,nbins)
-% hillside1=kstar;
-% sortedfitness=sort(fitness)
-% sortedfitness(1:20)
-% sortedfitness(length(fitness):-1:length(fitness)-19)
+p = sum(fitness(:) == kstar);
+%r_k=(kworst-kstar)/(kworst+kstar);
+%nbins=kworst-kstar+1;
+%figure(1)
+%histogram(fitness,nbins)
+%sortedfitness=sort(fitness);
+%sortedfitness(1:20);
+%sortedfitness(length(fitness):-1:length(fitness)-19);

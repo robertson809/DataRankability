@@ -2,7 +2,7 @@ function [hill,rank] = hillSQfield()
 
 hill = zeros(1,7);
 rank = zeros(1,7);
-for year=2013:2019
+for year=2013:2015
     dataStr = strcat('../../data_files/SinquefieldCup/SinquefieldCup',int2str(year),'.csv');
     fid = fopen(dataStr);
     info = fgetl(fid);
@@ -38,7 +38,11 @@ for year=2013:2019
             end
         end
         rank(k,year-2012) = specR(d);
+        [kstar,kworst,p]=HillsideHISTbruteforce(d);
+        hill(k,year-2012) = 1 - kstar*p/(kworst*factorial(numPlayers));
     end
-    [kstar,kworst]=HillsideHISTbruteforce(d);
-    hill(year-2012) = (kworst-kstar)/(kworst+kstar);
 end
+
+corr(rank(1:6,1),hill(1:6,1))
+corr(rank(1:10,2),hill(1:10,2))
+corr(rank(1:9,2),hill(1:9,3))

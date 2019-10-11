@@ -4,6 +4,7 @@
 # Date: 5/30/2019
 import numpy as np
 from matplotlib import pyplot as plt
+import networkx as nx
 import itertools
 from math import pi as pi
 
@@ -52,8 +53,8 @@ def qnr(l):
         q[j+1,j] = -(j+1)
         q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
     m = np.dot(np.transpose(q),np.dot(l,q))
-    print("******** Q Matrix ********")
-    print(m)
+    #print("******** Q Matrix ********")
+    #print(m)
     nr(m)
 
 ###############################################
@@ -71,10 +72,9 @@ def unique_perm(a,n):
     return perm
 
 ###############################################
-###             Main                        ###
+###             allQNR                      ###
 ###############################################
-def main():
-    n = 3
+def allQNR(n):
     adj = []
     
     for i in itertools.product([0, 1], repeat = n*n):
@@ -89,8 +89,26 @@ def main():
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
         l = np.diag(x) - a
-        print("******** Graph Laplacian ********")
-        print(l)
+        #print("******** Graph Laplacian ********")
+        #print(l)
+        g = nx.DiGraph(a)
+        nx.draw(g,with_labels=True)
+        plt.show()
         qnr(l)
+
+###############################################
+###             impStar                     ###
+###############################################
+def impStar(n):
+    a = np.zeros((n,n))
+    for i in range(n-1):
+        a[i,n-1] = -1
+    g = nx.DiGraph(a)
+    nx.draw(g)
+    plt.show()
+    x = np.array([np.sum(a[i,:]) for i in range(n)])
+    l = np.diag(x) - a
+    qnr(l)
     
-main()
+allQNR(3)
+#impStar(4)
