@@ -76,8 +76,8 @@ def unique_perm(a,n):
 ###############################################
 ###             allQNR                      ###
 ###############################################
-def allQNR(n):
-    adj = []
+def allQNR(n, graph_num = -1):
+    adj = [] #adjacency matrix of all i-unique graphs
     #find all isomorphically unique graphs
     for i in itertools.product([0, 1], repeat = n*n):
         a = np.reshape(np.array(i),(n,n))
@@ -86,8 +86,14 @@ def allQNR(n):
             add = not any(np.array_equal(p,x) for p in perm for x in adj)
             if(add):
                 adj.append(a)
-    print(len(adj)) 
-            
+    print('There are {} isomorphically unique graphs '
+        'with {} vertices'.format(len(adj), n)) 
+        
+    if graph_num != -1: #turn adj into a singleton
+        g = adj[graph_num]
+        adj = [g]
+        print('yo adj is', adj)
+        
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
         l = np.diag(x) - a
@@ -112,5 +118,6 @@ def impStar(n):
     l = np.diag(x) - a
     qnr(l)
     
+allQNR(3, graph_num= 10)
 allQNR(3)
 #impStar(4)
