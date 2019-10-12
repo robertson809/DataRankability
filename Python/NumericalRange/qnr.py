@@ -7,13 +7,15 @@ from matplotlib import pyplot as plt
 import networkx as nx
 import itertools
 from math import pi as pi
-
+##Global variables are realllly bad practice but otherwise
+##I'd have to pass things all over the place
+singleton_index_list = []
 ###############################################
 ###             Numerical Range             ###
 ###############################################
-def nr(a):
+def nr(a, graph_num):
     """Plots numerical range of a matrix with its eigenvalues."""
-    nv = 120
+    nv = 120 #some kind of precision
     m, n = a.shape
     if(m!=n):
         print('Warning: matrix is non-square')
@@ -22,18 +24,20 @@ def nr(a):
         e = np.linalg.eigvals(a)
         f = []
         for k in range(1,nv+1):
-            z = np.exp(2*pi*1j*(k-1)/nv)
+            z = np.exp(2*pi*1j*(k-1)/nv) #roots of unity
             a1 = z*a
-            a2 = (a1 + np.transpose(np.conjugate(a1)))/2
-            w, v = np.linalg.eig(a2)
+            a2 = (a1 + np.transpose(np.conjugate(a1)))/2 #A_2 is Hermitian part, and the NR of A_2 is the Real part of NR(A)
+            w, v = np.linalg.eig(a2) 
             ind = np.argsort(w)
-            w = w[ind]
+            w = w[ind] #sorts the array
             v = v[:,ind]
             v = v[:,n-1]
+            #gives a point on the nr
             f.append(np.dot(np.conjugate(v),np.dot(a,v))/np.dot(np.conjugate(v),v))
         f.append(f[0])
         f = np.array(f)
-        
+        if is_singleton(f):
+            singleton_index_list.append(graph_num)
         plt.subplot(122)
         plt.plot(np.real(f),np.imag(f))
         plt.plot(np.real(e),np.imag(e),'r*')
@@ -43,7 +47,7 @@ def nr(a):
 ###############################################
 ###             Q Numerical Range           ###
 ###############################################
-def qnr(l):
+def qnr(l, graph_num):
     """Plots q numerical range of graph Laplacian."""
     m, n = l.shape
     if(m!=n):
@@ -57,7 +61,7 @@ def qnr(l):
     m = np.dot(np.transpose(q),np.dot(l,q))
     #print("******** Q Matrix ********")
     #print(m)
-    nr(m)
+    nr(m, graph_num)
 
 ###############################################
 ###             Unique Permutation          ###
@@ -73,10 +77,22 @@ def unique_perm(a,n):
             perm.append(b)
     return perm
 
+def is_singleton(f):
+    """
+    checks to see if the shape described by the points in the array
+    are really all the same point
+    """
+    return np.var(f) < 0.001
+    
+    
 ###############################################
 ###             allQNR                      ###
 ###############################################
-def allQNR(n, graph_num = -1):
+def allQNR(n, r_graph_num = -1):
+    """
+    r_graph_num is for requested graph number, it will only
+    print one graph and numerical range pair
+    """
     adj = [] #adjacency matrix of all i-unique graphs
     #find all isomorphically unique graphs
     for i in itertools.product([0, 1], repeat = n*n):
@@ -89,11 +105,11 @@ def allQNR(n, graph_num = -1):
     print('There are {} isomorphically unique graphs '
         'with {} vertices'.format(len(adj), n)) 
         
-    if graph_num != -1: #turn adj into a singleton
-        g = adj[graph_num]
+    if r_graph_num != -1: #turn adj into a singleton
+        g = adj[r_graph_num]
         adj = [g]
-        print('yo adj is', adj)
         
+    graph_num = 0  
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
         l = np.diag(x) - a
@@ -101,8 +117,13 @@ def allQNR(n, graph_num = -1):
         #print(l)
         g = nx.DiGraph(a)
         nx.draw(g,with_labels=True, ax = plt.subplot(121))
-        qnr(l)
+        if r_graph_num == -1:
+            plt.title('Graph {}'.format(graph_num))
+        else:
+            plt.title('Graph {}'.format(r_graph_num))
+        qnr(l, graph_num)
         plt.show()
+        graph_num += 1
 
 ###############################################
 ###             impStar                     ###
@@ -118,6 +139,7 @@ def impStar(n):
     l = np.diag(x) - a
     qnr(l)
     
-allQNR(3, graph_num= 10)
-allQNR(3)
+#allQNR(3, r_graph_num= 15)
+allQNR(5)
+print('the singletons are at', singleton_index_list)
 #impStar(4)
