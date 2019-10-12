@@ -33,6 +33,8 @@ def nr(a):
             f.append(np.dot(np.conjugate(v),np.dot(a,v))/np.dot(np.conjugate(v),v))
         f.append(f[0])
         f = np.array(f)
+        
+        plt.subplot(122)
         plt.plot(np.real(f),np.imag(f))
         plt.plot(np.real(e),np.imag(e),'r*')
         #plt.gca().set_aspect('equal', adjustable='box')
@@ -76,7 +78,7 @@ def unique_perm(a,n):
 ###############################################
 def allQNR(n):
     adj = []
-    
+    #find all isomorphically unique graphs
     for i in itertools.product([0, 1], repeat = n*n):
         a = np.reshape(np.array(i),(n,n))
         if(np.trace(a)==0):
@@ -84,7 +86,7 @@ def allQNR(n):
             add = not any(np.array_equal(p,x) for p in perm for x in adj)
             if(add):
                 adj.append(a)
-    print(len(adj))
+    print(len(adj)) 
             
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
@@ -92,9 +94,9 @@ def allQNR(n):
         #print("******** Graph Laplacian ********")
         #print(l)
         g = nx.DiGraph(a)
-        nx.draw(g,with_labels=True)
-        plt.show()
+        nx.draw(g,with_labels=True, ax = plt.subplot(121))
         qnr(l)
+        plt.show()
 
 ###############################################
 ###             impStar                     ###
