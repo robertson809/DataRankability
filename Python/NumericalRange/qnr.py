@@ -139,7 +139,7 @@ def impStar(n):
     l = np.diag(x) - a
     qnr(l)
     
-#allQNR(3, r_graph_num= 15)
-allQNR(5)
+allQNR(4, r_graph_num= 217)
+#allQNR(5)
 print('the singletons are at', singleton_index_list)
 #impStar(4)
