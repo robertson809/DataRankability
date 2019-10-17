@@ -1,0 +1,23 @@
+\frametitle{hillR}
+\begin{lstlisting}[frame=single,style=python]
+def hillR(a):
+    n = len(a)
+    c = np.zeros((n,n))
+    for i in range(n):
+        for j in range(n):
+            c[i,j] = -(np.count_nonzero((a[:,j]<a[:,i]).astype(int)) + np.count_nonzero((a[i,:]<a[j,:]).astype(int)))
+    fitness = []
+    perm = list(itertools.permutations(range(n)))
+    for k in range(len(perm)):
+        temp = c[perm[k],:]
+        temp = temp[:,perm[k]]
+        temp = temp*np.triu(np.ones((n,n)))
+        fitness.append(-np.sum(temp))
+    kstar=np.amin(fitness);
+    kworst=np.amax(fitness);
+    p = sum((fitness==kstar).astype(int))
+    if(kstar==0 and kworst==0):
+        return 0.
+    else:
+        return ((kworst-kstar)/(kworst+kstar))*(1-p/factorial(n))
+\end{lstlisting}

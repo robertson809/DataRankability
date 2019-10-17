@@ -1,3 +1,0 @@
-\beamer@sectionintoc {1}{SpecR Algorithm}{2}{0}{1}
-\beamer@sectionintoc {2}{Sinquefield Cup}{6}{0}{2}
-\beamer@sectionintoc {3}{The Ranking Fit}{14}{0}{3}
