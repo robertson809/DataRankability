@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 import networkx as nx
 import itertools
 from math import pi as pi
+from operator import itemgetter
 ##Global variables are realllly bad practice but otherwise
 ##I'd have to pass things all over the place
 singleton_index_list = []
@@ -91,7 +92,7 @@ def is_singleton(f):
 def allQNR(n, r_graph_num = -1):
     """
     r_graph_num is for requested graph number, it will only
-    print one graph and numerical range pair
+    print the requested graph-numerical range pair
     """
     adj = [] #adjacency matrix of all i-unique graphs
     #find all isomorphically unique graphs
@@ -105,26 +106,35 @@ def allQNR(n, r_graph_num = -1):
     print('There are {} isomorphically unique graphs '
         'with {} vertices'.format(len(adj), n)) 
         
-    if r_graph_num != -1: #turn adj into a singleton
-        g = adj[r_graph_num]
-        adj = [g]
+    if r_graph_num != -1: #turn adj into a singleton to only return one graph
+        if type(r_graph_num) == int:
+            g = adj[r_graph_num]
+            adj = [g]
+        if type(r_graph_num) == list:
+            adj = [adj[num] for num in r_graph_num]
         
     graph_num = 0  
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
         l = np.diag(x) - a
-        #print("******** Graph Laplacian ********")
-        #print(l)
+        print("******** Graph Laplacian ********")
+        print(l)
         g = nx.DiGraph(a)
         nx.draw(g,with_labels=True, ax = plt.subplot(121))
         if r_graph_num == -1:
             plt.title('Graph {}'.format(graph_num))
-        else:
+        elif type(r_graph_num) == int:
             plt.title('Graph {}'.format(r_graph_num))
+        elif type(r_graph_num) == list:
+            plt.title('Graph {}'.format(r_graph_num[graph_num]))
         qnr(l, graph_num)
-        plt.show()
-        graph_num += 1
+        #plt.show()
+        #print('showing the numerical range of just L')
+        #nr(l, graph_num)
+        graph_num += 1 
 
+#The imploding stars for 3 graphs are 0, 6, 13 and 15
+#for 4 they are 0, 76, 176, 213, and 217
 ###############################################
 ###             impStar                     ###
 ###############################################
@@ -139,7 +149,23 @@ def impStar(n):
     l = np.diag(x) - a
     qnr(l)
     
-allQNR(4, r_graph_num= 217)
-#allQNR(5)
+baseball = [15,20, 39]
+pseduocycles = [27, ]
+lines = [21]
+three_IS = [0, 6, 13, 15]
+four_IS = [0, 76, 176, 213, 217]
+#two exploding star for five vertices. 
+#look at k exploding stars and lines 
+#what are lines? We have a theory that they are either exploding stars
+# or they are k -- imploding stars unioned with disjoint isolated vertices.
+
+#check to see if the 2 exploding star on n vertices is always the line from 0 to n
+# or it's the 3 exploding star, or it's the n -2 exploding
+
+#allQNR(4, r_graph_num= 76)
+# allQNR(4, r_graph_num = four_IS)
+allQNR(4)
 print('the singletons are at', singleton_index_list)
 #impStar(4)
+
+
