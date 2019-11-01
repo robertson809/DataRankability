@@ -10,7 +10,7 @@ n=size(D,1);
 % C matrices built from D
 
 %Find C- by definition 2.1
-
+C=zeros(n,n);
 for i=1:n
     for j=1:n
         C(i,j)=-nnz(D(:,j)-D(:,i)<0)-nnz(D(i,:)-D(j,:)<0);
@@ -20,7 +20,7 @@ end
 %%% This code computes the k-histogram using brute force
 %%% total enumeration with smart nextperm.m code
 i=1;
-perm=[1:n]; % first permutation input to nextperm.m function is [1:n]
+perm=1:n; % first permutation input to nextperm.m function is [1:n]
 fitness(i)=sum(sum(C(perm,perm).*triu(ones(length(perm),length(perm)),1))); 
 
 while sum(nextperm(perm,n) == perm)< n
@@ -29,8 +29,8 @@ while sum(nextperm(perm,n) == perm)< n
     fitness(i)=sum(sum(C(perm,perm).*triu(ones(length(perm),length(perm)),1)));
 end 
 fitness=-fitness;
-kstar=min(fitness);
-kworst=max(fitness);
+[kstar,~]=min(fitness);
+[kworst,~]=max(fitness);
 p = sum(fitness(:) == kstar);
 %r_k=(kworst-kstar)/(kworst+kstar);
 %nbins=kworst-kstar+1;

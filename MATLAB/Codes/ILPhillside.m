@@ -1,4 +1,4 @@
-function [hillside1]=ILPhillside(D)
+function [kstar,kworst]=ILPhillside(D)
 
 %Get matrices for MPS file
 %function [A,b,Aeq,beq,c]=ILPRatingDiff(D);
@@ -39,14 +39,14 @@ n=size(D,1);
 % C matrices built from D
 
 %Find C- by definition 2.1
-
+C = zeros(n,n);
 for i=1:n
     for j=1:n
         C(i,j)=-nnz(D(:,j)-D(:,i)<0)-nnz(D(i,:)-D(j,:)<0);
     end
 end
 C
-
+return
 %build W- matrix
 % for i=1:n
 %     for j=1:n
@@ -115,7 +115,6 @@ beq=ones(.5*n*(n-1),1);
 % X
 % Rank
 
-'Non-Iterative BILP'
 % create A matrix and b vector for Yoshi's CONSTRAINT 2
 A=spalloc(n*(n-1)*(n-2),n^2,6*n*(n-1)*(n-2));
 ncon2=0;
@@ -131,14 +130,12 @@ for i=1:n
         end
     end
 end
-b=[2*ones(n*(n-1)*(n-2),1)];
-
-' Yoshi ILP'
+b=2*ones(n*(n-1)*(n-2),1);
 
 % all variables must be integer, define lb and ub vectors
-intcon=[1:n*n]';
-lb=[zeros(n*n,1)];
-ub=[ones(n*n,1)];
+%intcon=[1:n*n]';
+lb=zeros(n*n,1);
+ub=ones(n*n,1);
 % force xii=0 for all i by setting lb=0 and ub=0 for these indices
 indicesxii=1:n+1:n^2;
 lb(indicesxii)=0;
@@ -154,60 +151,17 @@ ub(indicesxii)=0;
 % fIntSol=evalin('base','fIntSol') ; % fIntSol is a vector of the objective values associated with xIntSol
 
 
-
 % solve LP Relaxation instead
-tic;
 options=optimoptions('linprog','Display','iter','Algorithm','interior-point-legacy','Diagnostics','on');
 %options=optimoptions('linprog','Display','iter','Algorithm','dual-simplex','Diagnostics','on');
-[x,fval,exitflag,output] = linprog(-c,A,b,Aeq,beq,lb,ub,options)
-LPtime=toc
+[x,fval,~,~] = linprog(-c,A,b,Aeq,beq,lb,ub,options);
 
 
 
-X=reshape(x,n,n)
-s=sum(X');
-hillside1=fval
-[value,perm]=sort(s,'descend');
-Rank=perm'
-X(Rank,Rank)
-
-% D
- 'D(r,r)'
- D(Rank,Rank)
-'C(r,r)'
-C(Rank,Rank)
-'C.*X'
-C.*X
-sum(sum(C.*X))
-
-% 
-% 
-figure(1)
-cityplot(D)
-figure(2)
-cityplot(D(Rank,Rank))
-% % clear options
-
-
-% %%% This next batch of code computes the k-histogram using brute force
-% %%% total enumeration with smart nextperm.m code
-% i=1;
-% perm=[1:n]; % first permutation input to nextperm.m function is [1:n]
-% fitness(i)=sum(sum(C(perm,perm).*triu(ones(length(perm),length(perm)),1))); 
-% 
-% while sum(nextperm(perm,n) == perm)< n
-%     i=i+1;
-%     perm=nextperm(perm,n);
-%     fitness(i)=sum(sum(C(perm,perm).*triu(ones(length(perm),length(perm)),1)));
-% end 
-% fitness=-fitness;
-% kstar=min(fitness)
-% kworst=max(fitness)
-% r_k=(kworst-kstar)/(kworst+kstar)
-% nbins=kworst-kstar+1;
-% figure(3)
-% histogram(fitness,nbins)
-% % sortedfitness=sort(fitness)
-% % sortedfitness(1:20)
-% % sortedfitness(length(fitness):-1:length(fitness)-19)
-
+X=reshape(x,n,n);
+s=sum(X,2);
+kstar=fval;
+[~,perm]=sort(s,'descend');
+revPerm = flip(perm);
+kworst = -sum(sum(C(revPerm,revPerm).*triu(ones(n,n))));
+return
