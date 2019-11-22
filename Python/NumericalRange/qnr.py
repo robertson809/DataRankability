@@ -125,50 +125,56 @@ def is_polygon(f, l):
     # find convex hull of eig l
     evs = np.linalg.eigvals(l)
     twod_evs = np.column_stack((evs.real, evs.imag))
-    print(twod_evs)
-    hull: ConvexHull = ConvexHull(twod_evs, incremental=True)
-    print(type(hull._points))
-    print(hull.points[2][1])
-    line_list = []
-    for i in range(len(hull.points)):
-        if i < len(hull.points) - 1:
-            if hull.points[i][0] == hull.points[i + 1][0]:
-                print('catch vertical line exception')
-                print('true if y ==y only')
-
-            def funct(x_1):
-                return (x_1 - hull.points[int(i)][0]) / (hull.points[int(i + 1)][0] - hull.points[int(i)][0])
-
-            def funcy(t_1):
-                return hull.points[i][1] + t_1 * (hull.points[i + 1][1] - hull.points[i + 1][0])
-            line_list.append((funct, funcy))
-        else:
-            if hull.points[i][0] == hull.points[0][0]:
-                print('catch vertical line exception')
-                print('true if y ==y only')
-
-            def funct(x_1):
-                return (x_1 - hull.points[i][0]) / (hull.points[0][0] - hull.points[i][0])
-
-            def funcy(t_1):
-                return hull.points[i][1] + t_1 * (hull.points[0][1] - hull.points[0][0])
-            line_list.append((funct, funcy))
+    hull = ConvexHull(twod_evs, incremental=True)
+    ordered_vertices = hull.points[hull.vertices]
+    is_poly = True
+    count = 0
     for num in f:
-        print(f[0].real, f[0].imag)
-        print('should be same as', num.real, num.imag)
-        for line in line_list:
-            t = line[0](num.real)
-            if abs(funcy(t_1) - num.imag) > .001:
-                print('not a polygon')
-                return false
-            else:
-                print('okay point')
+        count += 1
+        print(count)
+        if not is_poly:
+            print('this is not a polygon')
+            break
+        else:
+            for i in range(len(ordered_vertices)):
+                if i < len(ordered_vertices) - 1:
+                    if ordered_vertices[i][0] == ordered_vertices[i + 1][0]:  # vertical line exception
+                        if abs(num.real - ordered_vertices[i][0]) < .01 and ordered_vertices[i][1] < num.imag < \
+                                hull.points[i + 1][1]:
+                            is_poly = True
+                            break
+                        else:
+                            is_poly = False
+                    else:
+                        t_1 = (num.real - ordered_vertices[i][0]) / (ordered_vertices[i + 1][0] - ordered_vertices[i][0])
+                        y = ordered_vertices[i][1] + t_1 * (ordered_vertices[i + 1][1] - ordered_vertices[i + 1][0])
+                else:
+                    if ordered_vertices[i][0] == ordered_vertices[0][0]:  # vertical line
+                        if abs(num.real - ordered_vertices[i][0]) < .01 and ordered_vertices[i][1] < num.imag < \
+                                hull.points[0][1]:
+                            is_poly = True
+                            print('point is a polygon')
+                            break
+                        else:
+                            is_poly = False
+                    else:
+                        t_1 = (num.real - ordered_vertices[int(i)][0]) / (ordered_vertices[0][0] - ordered_vertices[i][0])
+                        y = ordered_vertices[i][1] + t_1 * (ordered_vertices[0][1] - ordered_vertices[0][0])
+                if abs(num.imag - y) < .01:
+                    print('not a polygon')
+                    is_poly = False
+                else:
+                    print('is a polygon')
+                    is_poly = True
+                    break
+    if is_poly:
+        print('this is a polygon')
     for simplex in hull.simplices:
         x = twod_evs[simplex, 0]
         y = twod_evs[simplex, 1]
         plt.plot(twod_evs[simplex, 0], twod_evs[simplex, 1], 'k-')
     plt.show()
-    return hull._points
+    return hull.points
 
 
 # class GetT:
