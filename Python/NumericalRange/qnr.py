@@ -12,6 +12,8 @@ from operator import itemgetter
 # Global variables are realllly bad practice but otherwise
 # I'd have to pass things all over the place
 from scipy.spatial.qhull import ConvexHull
+from numpy.linalg import matrix_rank
+from numpy.linalg import det as det
 
 singleton_index_list = []
 line_index_list = []
@@ -47,9 +49,10 @@ def nr(a, graph_num, disp):
     f = np.array(f)
     if is_singleton(f):
         singleton_index_list.append(graph_num)
-    if is_line(f):
+    elif is_line(f):
         line_index_list.append(graph_num)
-    is_polygon(f, a)
+    elif is_polygon(f, a):
+        poly_index_list.append(graph_num)
     if disp:
         plt.subplot(122)
         plt.plot(np.real(f), np.imag(f))
@@ -110,6 +113,36 @@ def is_line(f):
     return np.sum(np.absolute(np.imag(f))) < .001
 
 
+def linearly_dep(evs):
+    ones = np.ones((1, (int(evs.size / 2))))
+    area_mat = np.append(evs, ones, axis=0)
+    area = det(area_mat)
+    return area <= .001
+
+
+def euler_sort(evs):
+    print('hello')
+    print('angles:', np.angle(evs))
+    return np.argsort(np.angle(evs))
+
+# def linearly_dep(evs):
+#     x_all_zero = True
+#     for ev in evs:
+#         if ev[0] == 0:
+#             continue
+#         else:
+#             x_all_zero = False
+#             k = evs[0][1]/evs[0][0]
+#             break
+#     if x_all_zero:
+#         return True
+#     for ev in evs:
+#         if ev[0] * k != ev[1]:
+#             return False
+#             break
+#     return True
+
+
 def is_polygon(f, l):
     """
     If the NR is a n-gon, then it will have n corners, which must be the n eigenvalues.
@@ -125,11 +158,16 @@ def is_polygon(f, l):
     # find convex hull of eig l
     evs = np.linalg.eigvals(l)
     twod_evs = np.column_stack((evs.real, evs.imag))
-    hull = ConvexHull(twod_evs, incremental=True)
-    ordered_vertices = hull.points[hull.vertices]
+    # if linearly_dep(np.transpose(twod_evs)) or evs.size == 2:
+    #     print('evs lie on a lie - not a polygon')
+    #     return False
+    ordered_vertices = twod_evs[euler_sort(evs)]
+    # hull = ConvexHull(twod_evs, incremental=True)
+    # ordered_vertices = hull.points[hull.vertices]
     is_poly = True
     count = 0
     for num in f:
+        print('line 170 follows')
         count += 1
         print(count)
         if not is_poly:
@@ -140,8 +178,9 @@ def is_polygon(f, l):
                 if i < len(ordered_vertices) - 1:
                     if ordered_vertices[i][0] == ordered_vertices[i + 1][0]:  # vertical line exception
                         if abs(num.real - ordered_vertices[i][0]) < .01 and ordered_vertices[i][1] < num.imag < \
-                                hull.points[i + 1][1]:
+                                ordered_vertices[i + 1][1]:
                             is_poly = True
+                            print('line 170 should follow')
                             break
                         else:
                             is_poly = False
@@ -160,21 +199,20 @@ def is_polygon(f, l):
                     else:
                         t_1 = (num.real - ordered_vertices[int(i)][0]) / (ordered_vertices[0][0] - ordered_vertices[i][0])
                         y = ordered_vertices[i][1] + t_1 * (ordered_vertices[0][1] - ordered_vertices[0][0])
-                if abs(num.imag - y) < .01:
-                    print('not a polygon')
-                    is_poly = False
-                else:
-                    print('is a polygon')
-                    is_poly = True
-                    break
-    if is_poly:
-        print('this is a polygon')
-    for simplex in hull.simplices:
-        x = twod_evs[simplex, 0]
-        y = twod_evs[simplex, 1]
-        plt.plot(twod_evs[simplex, 0], twod_evs[simplex, 1], 'k-')
+                        if abs(num.imag - y) < .01:
+                            print('is a polygon')
+                            is_poly = True
+                            break
+                        else:
+                            print('is not a polygon')
+                            is_poly = False
+
+    # for simplex in hull.simplices:
+    #     x = twod_evs[simplex, 0]
+    #     y = twod_evs[simplex, 1]
+    #     plt.plot(twod_evs[simplex, 0], twod_evs[simplex, 1], 'k-')
     plt.show()
-    return hull.points
+    return is_poly
 
 
 # class GetT:
@@ -253,7 +291,7 @@ def isoQNR(n, r_graph_num=-1, disp=True):
     for a in adj:
         x = np.array([np.sum(a[i, :]) for i in range(n)])
         l = np.diag(x) - a
-        print("******** Graph Laplacian ********")
+        print("******** Graph Laplacian #{} ********".format(graph_num))
         print(l)
         g = nx.DiGraph(a)
         nx.draw(g, with_labels=True, ax=plt.subplot(121))
@@ -327,9 +365,11 @@ four_IS = [0, 76, 176, 213, 217]
 
 
 qnr(np.asarray([[1, 0, 0, 0, -1], [-1, 1, 0, 0, 0], [0, -1, 1, 0, 0], [0, 0, -1, 1, 0], [0, 0, 0, -1, 1]]), -1, True)
+qnr(np.asarray([[1,  0,  0, -1],[0,  2, -1, -1],[-1,  0,  2, -1], [-1,  0,  0,  1]]), -1, True)
 
+isoQNR(4)
 # isoQNR(4, [0, 3, 4, 19, 21, 23, 56, 62, 76, 79, 86, 91, 94, 117, 120, 125, 142, 176, 196, 203, 205, 213, 217])
-isoQNR(4, [0, 3, 4, 19, 21, 23, 56, 62, 76, 79, 86, 91, 94, 117, 120, 125, 142, 176, 196, 203, 205, 213, 217])
+# isoQNR(4, [0, 3, 4, 19, 21, 23, 56, 62, 76, 79, 86, 91, 94, 117, 120, 125, 142, 176, 196, 203, 205, 213, 217])
 print('the singletons are at', singleton_index_list)
 print('the lines are at', line_index_list)
 # impStar(4)
