@@ -12,7 +12,7 @@ from operator import itemgetter
 # Global variables are realllly bad practice but otherwise
 # I'd have to pass things all over the place
 from scipy.spatial.qhull import ConvexHull
-from numpy.linalg import matrix_rank
+from numpy.linalg import matrix_rank as matrix_rank
 from numpy.linalg import det as det
 
 singleton_index_list = []
@@ -121,26 +121,11 @@ def linearly_dep(evs):
 
 
 def euler_sort(evs):
-    print('hello')
-    print('angles:', np.angle(evs))
     return np.argsort(np.angle(evs))
 
-# def linearly_dep(evs):
-#     x_all_zero = True
-#     for ev in evs:
-#         if ev[0] == 0:
-#             continue
-#         else:
-#             x_all_zero = False
-#             k = evs[0][1]/evs[0][0]
-#             break
-#     if x_all_zero:
-#         return True
-#     for ev in evs:
-#         if ev[0] * k != ev[1]:
-#             return False
-#             break
-#     return True
+
+def in_between(a, b, x):
+    return a < x < b or b < x < a or abs(x - a) < .0001 or abs(x - b) < .0001
 
 
 def is_polygon(f, l):
@@ -158,73 +143,34 @@ def is_polygon(f, l):
     # find convex hull of eig l
     evs = np.linalg.eigvals(l)
     twod_evs = np.column_stack((evs.real, evs.imag))
-    # if linearly_dep(np.transpose(twod_evs)) or evs.size == 2:
-    #     print('evs lie on a lie - not a polygon')
-    #     return False
     ordered_vertices = twod_evs[euler_sort(evs)]
-    # hull = ConvexHull(twod_evs, incremental=True)
-    # ordered_vertices = hull.points[hull.vertices]
-    is_poly = True
+    on_line = False
     count = 0
+    # print(f)
     for num in f:
-        print('line 170 follows')
         count += 1
-        print(count)
-        if not is_poly:
-            print('this is not a polygon')
-            break
-        else:
-            for i in range(len(ordered_vertices)):
-                if i < len(ordered_vertices) - 1:
-                    if ordered_vertices[i][0] == ordered_vertices[i + 1][0]:  # vertical line exception
-                        if abs(num.real - ordered_vertices[i][0]) < .01 and ordered_vertices[i][1] < num.imag < \
-                                ordered_vertices[i + 1][1]:
-                            is_poly = True
-                            print('line 170 should follow')
-                            break
-                        else:
-                            is_poly = False
-                    else:
-                        t_1 = (num.real - ordered_vertices[i][0]) / (ordered_vertices[i + 1][0] - ordered_vertices[i][0])
-                        y = ordered_vertices[i][1] + t_1 * (ordered_vertices[i + 1][1] - ordered_vertices[i + 1][0])
+        on_line = False
+        for i in range(len(ordered_vertices)):
+            if i == len(ordered_vertices) - 1:
+                m = 0
+            else:
+                m = i + 1
+            if in_between(ordered_vertices[i][0], ordered_vertices[m][0], num.real) and \
+                    in_between(ordered_vertices[i][1], ordered_vertices[m][1], num.imag):
+                a = np.asarray([[num.real - ordered_vertices[i][0], ordered_vertices[m][0] -
+                                 ordered_vertices[i][0]],
+                                [num.imag - ordered_vertices[i][1],
+                                 ordered_vertices[m][1] - ordered_vertices[i][1]]])
+                if matrix_rank(a, tol=1e-14) == 1:
+                    print('point {} on line {}'.format(count, i))
+                    on_line = True
+                    break
                 else:
-                    if ordered_vertices[i][0] == ordered_vertices[0][0]:  # vertical line
-                        if abs(num.real - ordered_vertices[i][0]) < .01 and ordered_vertices[i][1] < num.imag < \
-                                hull.points[0][1]:
-                            is_poly = True
-                            print('point is a polygon')
-                            break
-                        else:
-                            is_poly = False
-                    else:
-                        t_1 = (num.real - ordered_vertices[int(i)][0]) / (ordered_vertices[0][0] - ordered_vertices[i][0])
-                        y = ordered_vertices[i][1] + t_1 * (ordered_vertices[0][1] - ordered_vertices[0][0])
-                        if abs(num.imag - y) < .01:
-                            print('is a polygon')
-                            is_poly = True
-                            break
-                        else:
-                            print('is not a polygon')
-                            is_poly = False
-
-    # for simplex in hull.simplices:
-    #     x = twod_evs[simplex, 0]
-    #     y = twod_evs[simplex, 1]
-    #     plt.plot(twod_evs[simplex, 0], twod_evs[simplex, 1], 'k-')
-    plt.show()
-    return is_poly
-
-
-# class GetT:
-#     def __init__(self, a, c):
-#         self.a = a
-#         self.c = c
-#     def get_func(self):
-#         def func(x):
-#             return (x - self.a) / (self.c - self.a)
-#         return func
-#
-# def get_y(t):
+                    print('not on line ', i)
+        if not on_line:
+            return False
+    print('is a polygon')
+    return True
 
 
 def allQNR(n, r_graph_num=-1, disp=False):
@@ -239,13 +185,23 @@ def allQNR(n, r_graph_num=-1, disp=False):
     """
     adj = []
     # produces a list of flattened matrices with 1,0 entries
-    for i in itertools.product(range(2), reapeat=n * n):
-        adj.append(np.reshape(np.array(i), n, n))  # don't give a shit if this is unique or not
-    graph_index = 0
+    for i in itertools.product([0, 1], repeat=n * n):
+        a = np.reshape(np.array(i), (n, n))  # don't give a shit if this is unique or not
+        if np.trace(a) == 0:
+            adj.append(a)
+
+    if r_graph_num != -1:  # turn adj into a singleton or shortened list
+        if type(r_graph_num) == int:
+            g = adj[r_graph_num]
+            adj = [g]
+        if type(r_graph_num) == list:
+            adj = [adj[num] for num in r_graph_num]
+
+    graph_num = 0
     for a in adj:
         x = np.array([np.sum(a[i, :]) for i in range(n)])
         l = np.diag(x) - a
-        if disp():
+        if disp:
             if r_graph_num == -1:
                 plt.title('Graph {}'.format(graph_num))
             elif type(r_graph_num) == int:
@@ -254,8 +210,8 @@ def allQNR(n, r_graph_num=-1, disp=False):
                 plt.title('Graph {}'.format(r_graph_num[graph_num]))
             g = nx.DiGraph(a)
             nx.draw(g, with_labels=True, ax=plt.subplot(121))
-        graph_index += 1
-        qnr(l, graph_index, disp)
+        graph_num += 1
+        qnr(l, graph_num, disp)
 
 
 def isoQNR(n, r_graph_num=-1, disp=True):
@@ -351,7 +307,8 @@ four_IS = [0, 76, 176, 213, 217]
 
 # to finish my proof to show that the eigenvalues are real, take the matrix in frobenius
 # normal form, and then look at it's imploding k complete graph sections and then its
-# pointing to everything else section. One you know the form of, the other is just a upper triangularmatrix so you know the eignvalues are k because the diangonal lines are k
+# pointing to everything else section. One you know the form of, the other is just a upper triangularmatrix so
+# you know the eignvalues are k because the diangonal lines are k
 
 # isoQNR(4, r_graph_num= 76)
 # isoQNR(4, r_graph_num = four_IS)
@@ -364,14 +321,16 @@ four_IS = [0, 76, 176, 213, 217]
 # cycle polygon
 
 
-qnr(np.asarray([[1, 0, 0, 0, -1], [-1, 1, 0, 0, 0], [0, -1, 1, 0, 0], [0, 0, -1, 1, 0], [0, 0, 0, -1, 1]]), -1, True)
-qnr(np.asarray([[1,  0,  0, -1],[0,  2, -1, -1],[-1,  0,  2, -1], [-1,  0,  0,  1]]), -1, True)
+# qnr(np.asarray([[1, 0, 0, 0, -1], [-1, 1, 0, 0, 0], [0, -1, 1, 0, 0], [0, 0, -1, 1, 0], [0, 0, 0, -1, 1]]), -1, True)
+# qnr(np.asarray([[1, 0, 0, -1], [0, 2, -1, -1], [-1, 0, 2, -1], [-1, 0, 0, 1]]), -1, True)
 
-isoQNR(4)
+# isoQNR(4)
+allQNR(4, disp=True)
 # isoQNR(4, [0, 3, 4, 19, 21, 23, 56, 62, 76, 79, 86, 91, 94, 117, 120, 125, 142, 176, 196, 203, 205, 213, 217])
 # isoQNR(4, [0, 3, 4, 19, 21, 23, 56, 62, 76, 79, 86, 91, 94, 117, 120, 125, 142, 176, 196, 203, 205, 213, 217])
 print('the singletons are at', singleton_index_list)
 print('the lines are at', line_index_list)
+print('the polygons are at', poly_index_list)
 # impStar(4)
 
 ##TODO
@@ -422,18 +381,27 @@ print('the lines are at', line_index_list)
 # line from point a = (a_1,a_2) to b = (b_1,b_2) is c = (a_1,a_2) - t(b_1 - a1, b2 - a2)
 
 # save the eigenvectors associated with polygons for alex
-L1 = np.asarray([
-    [1, 0, 0, 0, -1],
-    [0, 1, 0, 0, -1],
-    [0, 0, 1, 0, -1],
-    [0, 0, 0, 1, -1],
-    [-1, -1, -1, -1, 4]])
-L2 = np.asarray([[2, - 1, 0, -1, 0],
-                 [-1, 2, -1, 0, 0],
-                 [0, -1, 2, -1, 0],
-                 [-1, 0, -1, 2, 0],
-                 [0, 0, 0, 0, 0]])
-print('graph 1')
-nr(L1, 1, True)
-print('graph 2')
-nr(L2, 2, True)
+# L1 = np.asarray([
+#     [1, 0, 0, 0, -1],
+#     [0, 1, 0, 0, -1],
+#     [0, 0, 1, 0, -1],
+#     [0, 0, 0, 1, -1],
+#     [-1, -1, -1, -1, 4]])
+# L2 = np.asarray([[2, - 1, 0, -1, 0],
+#                  [-1, 2, -1, 0, 0],
+#                  [0, -1, 2, -1, 0],
+#                  [-1, 0, -1, 2, 0],
+#                  [0, 0, 0, 0, 0]])
+# print('graph 1')
+# nr(L1, 1, True)
+# print('graph 2')
+# nr(L2, 2, True)
+
+
+# problem with graph 208 on four vertices, the point is (2,0) but roundoff causes it to have a matrix of
+# rank 2
+# 208 also seems highly unstable, and the straight line kind of belies what's actually going on
+# nearly all the values in the numerical range sampling are at the eignvalues, not between them.
+# which is ironic, because most of the area is in the middle
+
+# changed tol to e -14 to protect, changed it to e -13 just to be safe
