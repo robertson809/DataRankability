@@ -46,7 +46,6 @@ for i=1:n
     end
 end
 C
-return
 %build W- matrix
 % for i=1:n
 %     for j=1:n
@@ -75,7 +74,7 @@ for j=1:n-1
     end
 end
 beq=ones(.5*n*(n-1),1);
-
+Aeq
 
 % 'Iterative BILP'
 %  
@@ -131,7 +130,7 @@ for i=1:n
     end
 end
 b=2*ones(n*(n-1)*(n-2),1);
-
+A
 % all variables must be integer, define lb and ub vectors
 %intcon=[1:n*n]';
 lb=zeros(n*n,1);
@@ -157,8 +156,10 @@ options=optimoptions('linprog','Display','iter','Algorithm','interior-point-lega
 [x,fval,~,~] = linprog(-c,A,b,Aeq,beq,lb,ub,options);
 
 
-
-X=reshape(x,n,n);
+fval
+x
+X=reshape(x,n,n)
+return
 s=sum(X,2);
 kstar=fval;
 [~,perm]=sort(s,'descend');

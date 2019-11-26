@@ -1,0 +1,528 @@
+% document class and packages
+\documentclass{beamer}
+%\usepackage{adjustbox}
+%\usepackage{algorithm,algorithmic}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+%\usepackage{graphicx}
+%\usepackage{hyperref}
+\usepackage{color, colortbl}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{arrows,decorations.markings}
+
+\tikzset{myptr/.style={decoration={markings,mark=at position 1 with %
+    {\arrow[scale=1.5,>=stealth]{>}}},postaction={decorate}}}
+
+% indent for algorithm pseudo-code
+\newlength\myindent
+\setlength\myindent{1em}
+\newcommand\bindent{%
+  \begingroup
+  \setlength{\itemindent}{\myindent}
+  \addtolength{\algorithmicindent}{\myindent}
+}
+\newcommand\eindent{\endgroup}
+
+% remove figure caption prefix
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+% hyperlinks setup
+\hypersetup{colorlinks,breaklinks,
+	urlcolor=[rgb]{0,0.75,1},
+	linkcolor=[rgb]{0.75,0.75,0.75}}
+
+% empty navigation symbols
+\beamertemplatenavigationsymbolsempty
+
+% remove navigation dots on miniframes
+\makeatletter
+\def\beamer@writeslidentry{\clearpage\beamer@notesactions}
+\makeatother
+
+% Use Theme
+\usetheme{Warsaw}
+\useoutertheme[footline=authortitle]{miniframes}
+\useinnertheme[shadow=true]{rounded}
+
+% Colors
+\definecolor{black}{RGB}{0,0,0} % black
+\definecolor{dgreen}{RGB}{0,73,73} % dark green
+\definecolor{lgreen}{RGB}{0,146,146} % light green
+\definecolor{dpink}{RGB}{255,109,182} % dark pink
+\definecolor{lpink}{RGB}{255,182,119} % light pink
+\definecolor{dpurple}{RGB}{73,0,146} % dark purple
+\definecolor{dblue}{RGB}{0,109,219} % dark blue
+\definecolor{lpurple}{RGB}{182,109,255} % light purple
+\definecolor{lblue}{RGB}{109,182,255} % light blue
+\definecolor{pblue}{RGB}{182,219,255} % powder blue
+\definecolor{dred}{RGB}{146,0,0} % dark red
+\definecolor{brown}{RGB}{146,73,0} % brown
+\definecolor{orange}{RGB}{219,209,0} % orange
+\definecolor{bgreen}{RGB}{36,255,36} % bright green
+\definecolor{yellow}{RGB}{255,255,109} % yellow
+
+% New Commands
+\newcommand\proj[2]{\textrm{proj}_{\textbf{#2}}{\textbf{#1}}}
+\newcommand\abs[1]{\left|#1\right|}
+\newcommand\norm[1]{\left\Vert#1\right\Vert}
+\newcommand\vv[2]{\left\langle #1,#2\right\rangle}
+\newcommand\vvv[3]{\left\langle #1,#2,#3\right\rangle}
+\DeclareMathOperator{\specr}{specR}
+\DeclareMathOperator{\edger}{edgeR}
+
+% Beamer Colors
+\setbeamercolor{palette primary}{bg=black,fg=black!10}
+\setbeamercolor{palette secondary}{bg=lblue,fg=black!10}
+\setbeamercolor{palette tertiary}{bg=black,fg=black!10}
+\setbeamercolor{structure}{fg=black}
+\setbeamercolor{frametitle}{fg=black}
+
+% Title Page
+\title{LAA Numerical Experiments}
+\author{Thomas R. Cameron}
+\institute{Davidson College}
+\date{\today}
+
+\begin{document}
+% Title Frame
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{SpecR vs EdgeR}
+\resizebox{1.0\textwidth}{!}{% SIMOD Graphs
+\begin{tabular}{cccc}
+\textbf{Complete dominance} & \textbf{Perturbed Dominance} & \textbf{Perturbed Random C} & \textbf{Nearly Disconnected} \\
+\resizebox{0.2\textwidth}{!}{% Complete dominance
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	\draw[black!75,->,thick](1) to [out=295,in=135,looseness=0](3);
+	\draw[black!75,->,thick](1) to [out=270,in=90,looseness=0](4);
+	\draw[black!75,->,thick](1) to [out=250,in=45,looseness=0](5);
+	\draw[black!75,->,thick](1) to [out=225,in=45,looseness=0](6);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[black!75,->,thick](2) to [out=240,in=60,looseness=0](4);
+	\draw[black!75,->,thick](2) to [out=225,in=15,looseness=0](5);
+	\draw[black!75,->,thick](2) to [out=180,in=0,looseness=0](6);
+	% vertex 3
+	\draw[black!75,->,thick](3) to [out=225,in=45,looseness=0](4);
+	\draw[black!75,->,thick](3) to [out=180,in=0,looseness=0](5);
+	\draw[black!75,->,thick](3) to [out=165,in=330,looseness=0](6);
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=135,in=315,looseness=0](5);
+	\draw[black!75,->,thick](4) to [out=115,in=315,looseness=0](6);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=90,in=270,looseness=0](6);
+	% vertex 6
+\end{tikzpicture}%
+}\hfill
+&
+\resizebox{0.2\textwidth}{!}{% Perturbed Dominance
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	\draw[black!75,->,thick](1) to [out=295,in=135,looseness=0](3);
+	\draw[black!75,->,thick](1) to [out=270,in=90,looseness=0](4);
+	\draw[black!75,->,thick](1) to [out=250,in=45,looseness=0](5);
+	\draw[black!75,->,thick](1) to [out=225,in=45,looseness=0](6);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=240,in=60,looseness=0](4);
+	\draw[black!75,->,thick](2) to [out=225,in=15,looseness=0](5);
+	\draw[black!75,->,thick](2) to [out=180,in=0,looseness=0](6);
+	% vertex 3
+	\draw[black!75,->,thick](3) to [out=135,in=295,looseness=0](1);
+	\draw[black!75,->,thick](3) to [out=225,in=45,looseness=0](4);
+	\draw[black!75,->,thick](3) to [out=180,in=0,looseness=0](5);
+	\draw[black!75,->,thick](3) to [out=165,in=330,looseness=0](6);
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=135,in=315,looseness=0](5);
+	\draw[black!75,->,thick](4) to [out=115,in=315,looseness=0](6);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=90,in=270,looseness=0](6);
+	% vertex 6
+\end{tikzpicture}%
+}\hfill
+&
+\resizebox{0.2\textwidth}{!}{% Perturbed Random C
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	\draw[black!75,->,thick](1) to [out=315,in=120,looseness=0](3);
+	\draw[black!75,->,thick](1) to [out=225,in=45,looseness=0](6);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=240,in=60,looseness=0](4);
+	\draw[black!75,->,thick](2) to [out=210,in=30,looseness=0](5);
+	% vertex 3
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=90,in=270,looseness=0](1);
+	\draw[black!75,->,thick](4) to [out=60,in=240,looseness=0](2);
+	\draw[black!75,->,thick](4) to [out=115,in=315,looseness=0](6);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=45,in=255,looseness=0](1);
+	\draw[black!75,->,thick](5) to [out=30,in=210,looseness=0](2);
+	% vertex 6
+	\draw[black!75,->,thick](6) to [out=45,in=225,looseness=0](1);
+	\draw[black!75,->,thick](6) to [out=0,in=180,looseness=0](2);
+	\draw[black!75,->,thick](6) to [out=330,in=165,looseness=0](3);
+	\draw[black!75,->,thick](6) to [out=270,in=90,looseness=0](5);
+\end{tikzpicture}%
+}\hfill
+&
+\resizebox{0.2\textwidth}{!}{% Near Disconnected
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	\draw[black!75,->,thick](1) to [out=295,in=135,looseness=0](3);
+	\draw[black!75,->,thick](1) to [out=270,in=90,looseness=0](4);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=270,in=90,looseness=0](3);
+	% vertex 3
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=135,in=315,looseness=0](5);
+	\draw[black!75,->,thick](4) to [out=115,in=315,looseness=0](6);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=90,in=270,looseness=0](6);
+	% vertex 6
+\end{tikzpicture}%
+}\\
+$\specr = 1.0000$ & $\specr = 0.9382$ & $\specr = 0.8202$ & $\specr = 0.6000$ \\
+$\edger = 1.0000$ & $\edger = 0.9994$ & $\edger = 0.9987$ & $\edger = 0.9926$ \\
+& & & \\
+\textbf{Random} & \textbf{Cycle} & \textbf{Completely Connected} & \textbf{Empty} \\
+\resizebox{0.2\textwidth}{!}{% Random
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	\draw[black!75,->,thick](1) to [out=315,in=120,looseness=0](3);
+	\draw[black!75,->,thick](1) to [out=225,in=45,looseness=0](6);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=240,in=60,looseness=0](4);
+	\draw[black!75,->,thick](2) to [out=210,in=30,looseness=0](5);
+	% vertex 3
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=90,in=270,looseness=0](1);
+	\draw[black!75,->,thick](4) to [out=115,in=315,looseness=0](6);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=45,in=255,looseness=0](1);
+	\draw[black!75,->,thick](5) to [out=30,in=210,looseness=0](2);
+	% vertex 6
+	\draw[black!75,->,thick](6) to [out=0,in=180,looseness=0](2);
+	\draw[black!75,->,thick](6) to [out=330,in=165,looseness=0](3);
+	\draw[black!75,->,thick](6) to [out=270,in=90,looseness=0](5);
+\end{tikzpicture}%
+}\hfill
+&
+\resizebox{0.2\textwidth}{!}{% Cycle
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=270,in=90,looseness=0](3);
+	% vertex 3
+	\draw[black!75,->,thick](3) to [out=225,in=45,looseness=0](4);
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=135,in=315,looseness=0](5);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=90,in=270,looseness=0](6);
+	% vertex 6
+	\draw[black!75,->,thick](6) to [out=45,in=225,looseness=0](1);
+\end{tikzpicture}%
+}\hfill
+&
+\resizebox{0.2\textwidth}{!}{% Completely Connected
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	\draw[black!75,->,thick](1) to [out=330,in=135,looseness=0](2);
+	\draw[black!75,->,thick](1) to [out=295,in=135,looseness=0](3);
+	\draw[black!75,->,thick](1) to [out=270,in=90,looseness=0](4);
+	\draw[black!75,->,thick](1) to [out=250,in=45,looseness=0](5);
+	\draw[black!75,->,thick](1) to [out=225,in=45,looseness=0](6);
+	% vertex 2
+	\draw[black!75,->,thick](2) to [out=135,in=330,looseness=0](1);
+	\draw[black!75,->,thick](2) to [out=270,in=90,looseness=0](3);
+	\draw[black!75,->,thick](2) to [out=240,in=60,looseness=0](4);
+	\draw[black!75,->,thick](2) to [out=225,in=15,looseness=0](5);
+	\draw[black!75,->,thick](2) to [out=180,in=0,looseness=0](6);
+	% vertex 3
+	\draw[black!75,->,thick](3) to [out=135,in=295,looseness=0](1);
+	\draw[black!75,->,thick](3) to [out=90,in=270,looseness=0](2);
+	\draw[black!75,->,thick](3) to [out=225,in=45,looseness=0](4);
+	\draw[black!75,->,thick](3) to [out=180,in=0,looseness=0](5);
+	\draw[black!75,->,thick](3) to [out=165,in=330,looseness=0](6);
+	% vertex 4
+	\draw[black!75,->,thick](4) to [out=90,in=270,looseness=0](1);
+	\draw[black!75,->,thick](4) to [out=60,in=240,looseness=0](2);
+	\draw[black!75,->,thick](4) to [out=45,in=225,looseness=0](3);
+	\draw[black!75,->,thick](4) to [out=135,in=315,looseness=0](5);
+	\draw[black!75,->,thick](4) to [out=115,in=315,looseness=0](6);
+	% vertex 5
+	\draw[black!75,->,thick](5) to [out=45,in=250,looseness=0](1);
+	\draw[black!75,->,thick](5) to [out=15,in=225,looseness=0](2);
+	\draw[black!75,->,thick](5) to [out=0,in=180,looseness=0](3);
+	\draw[black!75,->,thick](5) to [out=315,in=135,looseness=0](4);
+	\draw[black!75,->,thick](5) to [out=90,in=270,looseness=0](6);
+	% vertex 6
+	\draw[black!75,->,thick](6) to [out=45,in=225,looseness=0](1);
+	\draw[black!75,->,thick](6) to [out=0,in=180,looseness=0](2);
+	\draw[black!75,->,thick](6) to [out=330,in=165,looseness=0](3);
+	\draw[black!75,->,thick](6) to [out=315,in=115,looseness=0](4);
+	\draw[black!75,->,thick](6) to [out=270,in=90,looseness=0](5);
+\end{tikzpicture}%
+}\hfill
+&
+\resizebox{0.2\textwidth}{!}{% Empty
+\begin{tikzpicture}
+	\node[circle, shading=ball, ball color=black!75, color=white] (1) at (0,2) {\textbf{1}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (2) at (1,1) {\textbf{2}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (3) at (1,0) {\textbf{3}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (4) at (0,-1) {\textbf{4}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (5) at (-1,0) {\textbf{5}};
+	\node[circle, shading=ball, ball color=black!75, color=white] (6) at (-1,1) {\textbf{6}};
+	
+	% vertex 1
+	% vertex 2
+	% vertex 3
+	% vertex 4
+	% vertex 5
+	% vertex 6
+\end{tikzpicture}%
+}\\
+$\specr = 0.5891$ & $\specr = 0.3000$ & $\specr = 0.2000$ & $\specr = 0.0000$ \\
+$\edger = 0.9900$ & $\edger = 0.9939$ & $\edger = 0.0000$ & $\edger = 0.0000$.
+\end{tabular}%
+}
+\end{frame}
+
+\begin{frame}{Sinquefield Cup}
+\centering
+\resizebox{0.75\textwidth}{!}{% Sinquefield Cup
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel = Round Number,
+		ylabel =  Rankability,
+		legend pos = south east,
+		cycle list name = black white]
+		\addplot+[black] coordinates{
+			(1,0.1667)
+			(2,0.3333)
+			(3,0.4339)
+			(4,0.5305)
+			(5,0.6555)
+			(6,0.7917)
+		};
+		\addplot+[black!90] coordinates{
+			(1,0.1000)
+			(2,0.2000)
+			(3,0.3000)
+			(4,0.4000)
+			(5,0.5000)
+			(6,0.6000)
+			(7,0.7000)
+			(8,0.7583)
+			(9,0.7832)
+			(10,0.7500)
+		};
+		\addplot+[black!80] coordinates{
+			(1,0.1111)
+			(2,0.2222)
+			(3,0.2873)
+			(4,0.3686)
+			(5,0.4093)
+			(6,0.4578)
+			(7,0.5761)
+			(8,0.6208)
+			(9,0.6711)
+		};
+		\addplot+[black!70] coordinates{
+			(1,0.1111)
+			(2,0.1944)
+			(3,0.2611)
+			(4,0.3325)
+			(5,0.4220)
+			(6,0.4846)
+			(7,0.5152)
+			(8,0.5625)
+			(9,0.6067)
+		};
+		\addplot+[black!60] coordinates{
+			(1,0.1111)
+			(2,0.1944)
+			(3,0.2639)
+			(4,0.3666)
+			(5,0.4328)
+			(6,0.4889)
+			(7,0.5395)
+			(8,0.5719)
+			(9,0.6593)
+		};
+		\addplot+[black!50] coordinates{
+			(1,0.1111)
+			(2,0.1944)
+			(3,0.2662)
+			(4,0.3319)
+			(5,0.3876)
+			(6,0.4882)
+			(7,0.5391)
+			(8,0.5857)
+			(9,0.6389)
+		};
+		\addplot+[black!40] coordinates{
+			(1,0.0909)
+			(2,0.1591)
+			(3,0.2220)
+			(4,0.2826)
+			(5,0.3336)
+			(6,0.3847)
+			(7,0.4252)
+			(8,0.4668)
+			(9,0.5219)
+			(10,0.5572)
+			(11,0.6021)
+		};
+		\legend{2013, 2014, 2015, 2016, 2017, 2018,2019}
+	\end{axis}
+\end{tikzpicture}%
+}
+\end{frame}
+
+\begin{frame}{Elo Rating Correlation}
+For $i\geq 1$, let $e_{i}$ denote the Elo rating after round $i$.
+\vfill
+For $i>1$, define the $i$th round Elo rating correlation by 
+\[
+x_{i}=\textrm{spearmanr}(e_{i},e_{i-1}).
+\]
+\vfill
+We define the years Elo rating correlation by the weighted average
+\[
+\frac{\sum_{i=1}^{n}ix_{i}}{\sum_{i=1}^{n}i}.
+\]
+\end{frame}
+
+\begin{frame}{SinquefieldCup Elo Rating Correlation}
+\centering
+\resizebox{0.75\textwidth}{!}{% Sinquefield Cup
+\begin{tabular}{ccc}
+Year & Rankability & Elo Rating Correlation \\
+\hline
+\rowcolor{black!20}2013 & 0.7917 & 0.9600 \\
+2014 & 0.7500 & 0.9263 \\
+2015 & 0.6711 & 0.8537 \\
+2016 & 0.6067 & 0.8205 \\
+2017 & 0.6593 & 0.8675 \\
+2018 & 0.6389 & 0.9253 \\
+\rowcolor{black!20}2019 & 0.6021 & 0.7875 \\
+\end{tabular}
+}
+\vfill
+Spearman correlation between Rankability and Elo Rating Correlation is $0.86$.
+\end{frame}
+
+\begin{frame}{Big East Elo Rating Correlation}
+\centering
+\resizebox{0.45\textwidth}{!}{% Big East
+\begin{tabular}{ccc}
+Year & Rankability & Elo Rating Correlation \\
+\hline
+1995 & 0.8571 & 0.9253 \\
+1996 & 0.8571 & 0.9477 \\
+1997 & 0.8149 & 0.8487 \\
+1998 & 0.8169 & 0.8835 \\
+1999 & 0.8571 & 0.8945 \\
+2000 & 0.8571 & 0.9183 \\
+2001 & 0.8571 & 0.9397 \\
+\rowcolor{black!20}2002 & 0.8571 & 0.9525 \\
+2003 & 0.8571 & 0.9075 \\
+2004 & 0.6615 & 0.8077 \\
+2005 & 0.8375 & 0.9070 \\
+2006 & 0.8049 & 0.9218 \\
+2007 & 0.6841 & 0.7985 \\
+2008 & 0.8049 & 0.8803 \\
+2009 & 0.8571 & 0.9392 \\
+2010 & 0.7082 & 0.8434 \\
+\rowcolor{black!20}2011 & 0.7143 & 0.7312 \\
+2012 & 0.7143 & 0.8874 \\
+\end{tabular}
+}
+\vfill
+Spearman correlation between Rankability and Elo Rating Correlation is $0.89$.
+\end{frame}
+
+\begin{frame}{Mountain West Elo Rating Correlation}
+\centering
+\resizebox{0.50\textwidth}{!}{% Mountain West
+\begin{tabular}{ccc}
+Year & Rankability & Elo Rating Correlation \\
+\hline
+1999 & 0.7078 & 0.8736 \\
+\rowcolor{black!20}2000 & 0.8371 & 0.7269 \\
+2001 & 0.8571 & 0.9522 \\
+2002 & 0.8200 & 0.9192 \\
+2003 & 0.7489 & 0.8168 \\
+2004 & 0.8377 & 0.8842 \\
+2005 & 0.8450 & 0.8441 \\
+2006 & 0.8640 & 0.9129 \\
+2007 & 0.8750 & 0.9360 \\
+2008 & 0.8750 & 0.9538 \\
+\rowcolor{black!20}2009 & 1.0000 & 0.9669 \\
+2010 & 0.8750 & 0.9320 \\
+2011 & 0.8571 & 0.9201 \\
+\end{tabular}
+}
+\vfill
+Spearman correlation between Rankability and Elo Rating Correlation is $0.80$.
+\end{frame}
+
+\end{document}

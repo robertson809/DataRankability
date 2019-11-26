@@ -6,10 +6,9 @@
 # Date: 10/13/2019
 import itertools
 from math import factorial
+import cplex
 import numpy as np
-import pulp
-
-TOL = np.finfo(float).eps
+from copy import deepcopy
 
 ###############################################
 ###             Hausdorff                   ###
@@ -69,78 +68,216 @@ def hillR_BF(a):
     else:
         #return 1. - kstar*p/(kworst*factorial(n))
         return (kworst-kstar)/(kworst+kstar)
+
 ###############################################
 ###             hillR_LP                    ###
 ###############################################
 #   Computes Hillside Rankability Measure.
 ###############################################
 def hillR_LP(a):
-    """Computes Hillside Rankability Measure by solving LP using Pulp."""
+    """Computes Hillside Rankability Measure by solving LP using CPLEX."""
+    # paramters
+    TOL = 1e-6
+    EPS = np.finfo(float).eps
+    # perm function
+    def _perm(r,indI,indJ):
+        if(len(indI)==0):
+            return [r]
+        
+        lst = []
+        for p in _perm(r,indI[1:],indJ[1:]):
+            lst.append(deepcopy(p))
+            temp = p[indI[0]]
+            p[indI[0]] = p[indJ[0]]
+            p[indJ[0]] = temp
+            lst.append(deepcopy(p))
+            
+        return lst
     # build c matrix from data matrix a 
     n = len(a)
     c = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
             c[i,j] = np.count_nonzero((a[:,j]<a[:,i]).astype(int)) + np.count_nonzero((a[i,:]<a[j,:]).astype(int))
-    # hillside rankability pulp class
-    hillLP= pulp.LpProblem("Hillside LP",pulp.LpMinimize)
-    # decision variables
-    x = [[pulp.LpVariable("x{0}_{1}".format(i,j),lowBound=0,upBound=1,cat="Continuous") for j in range(n)] for i in range(n)]
-    # objective function
-    hillLP += np.sum(c*x)
-    # antisymmetry constraint
-    for i in range(n):
+    # objective function and bounds
+    obj = c.reshape(n*n)
+    lb = np.zeros(n*n)
+    ub = np.ones(n*n)
+    colnames = ["x"+str(i) for i in range(n*n)]
+    rownames = ["c"+str(i) for i in range(n*(n-1)//2 + n*(n-1)*(n-2))]
+    # equality constraints
+    count = 0; sense = ""
+    rows = []; cols = []; vals = []; rhs = []
+    for i in range(n-1):
         for j in range(i+1,n):
-                hillLP += x[i][j] + x[j][i] == 1
-    # transitivity constraint
+            rows.extend([count,count]);
+            cols.append(n*i+j); cols.append(n*j+i)
+            vals.extend([1.0,1.0])
+            rhs.append(1.0)
+            sense = sense + "E"
+            count = count + 1
+    # inequality constraints
+    tcol = []
     for i in range(n):
         for j in range(n):
             for k in range(n):
                 if(j!=i and k!=j and k!=i):
-                    hillLP += x[i][j] + x[j][k] + x[k][i] <= 2
+                    tset = {n*i+j,n*j+k,n*k+i}
+                    if(tset not in tcol):
+                        tcol.append(tset)
+                        rows.extend([count,count,count])
+                        vals.extend([1.0,1.0,1.0])
+                        rhs.append(2.0)
+                        sense = sense + "L"
+                        count = count + 1
+                        for s in tset:
+                            cols.append(s)
+    # colnames and rownames
+    colnames = ["x"+str(i) for i in range(n*n)]
+    rownames = ["c"+str(i) for i in range(count)]
+    # cplex problem variable
+    prob = cplex.Cplex()
+    # quite results
+    prob.set_results_stream(None)
+    # minimization problem
+    prob.objective.set_sense(prob.objective.sense.minimize)
+    # problem variables
+    prob.variables.add(obj=obj, lb=lb, ub=ub, names=colnames)
+    # linear constraints
+    prob.linear_constraints.add(rhs=rhs, senses=sense, names=rownames)
+    prob.linear_constraints.set_coefficients(zip(rows, cols, vals))
+    # barrier method
+    alg = prob.parameters.lpmethod.values
+    prob.parameters.lpmethod.set(alg.barrier)
+    prob.parameters.barrier.crossover.set(prob.parameters.barrier.crossover.values.none)
     # solve problem
-    hillLP.solve()
-    pulp.LpStatus[hillLP.status]
-    # optimal k value
-    kstar = pulp.value(hillLP.objective)
-    if(kstar==None):
-        return 0.
-    # worst k value
-    x = np.zeros((n,n))
-    for var in hillLP.variables():
-        ind = var.name.find('_')
-        x[int(var.name[1:ind]),int(var.name[ind+1:])] = var.varValue
-    print(x)
-    perm = np.sum(x,axis=1).argsort() # ascending order (worst ranking)
-    permC = c[perm,:]
-    permC = permC[:,perm]
-    kworst = np.sum(permC*np.triu(np.ones((n,n))))
-    # test
-    perm = np.flip(perm)
-    permC = c[perm,:]
-    permC = permC[:,perm]
-    print(np.sum(permC*np.triu(np.ones((n,n)))))
-    # print kstar and kworst
-    print(kstar)
-    print(kworst)
-    # call hillR_Pset
-    #hillR_Pset(x,kstar)
-    # return rankability
-    if(kstar<TOL and kworst<TOL):
-        return 0.
-    else:
-        return (kworst-kstar)/(kworst+kstar)
+    prob.solve()
+    # solution status
+    print("Hillside LP Solution Status = ", prob.solution.get_status(), ":", end=' ')
+    print(prob.solution.status[prob.solution.get_status()])
+    # store solution values
+    x = prob.solution.get_values()
+    x = np.array(x)
+    x[x<TOL] = 0.0
+    x[(1-x)<TOL] = 1.0
+    # kstar
+    kstar = np.dot(x,obj)
+    # k worst
+    x = x.reshape((n,n))
+    obj = np.array(obj).reshape((n,n))
+    r = list(np.sum(x,axis=1).argsort()) # ascending order (worst ranking)
+    c = obj[r,:]
+    c = c[:,r]
+    kworst = np.sum(c*np.triu(np.ones((n,n))))
+    print("kstar = %.2f" % kstar)
+    print("kworst = %.2f" % kworst)
+    # pSet
+    r = r[::-1] # descending order (best ranking)
+    permX = x[r,:]
+    permX = permX[:,r]
+    indI = []
+    indJ = []
+    for i in range(n):
+        for j in range(i+1,n):
+            if(permX[i,j]<1 and permX[i,j]>0):
+                indI.append(i)
+                indJ.append(j)
+    print(permX)
+    print(indI)
+    print(indJ)
+    c = obj[r,:]
+    c = c[:,r]
+    k = np.sum(c*np.triu(np.ones((n,n))))
+    pList = _perm(r,indI,indJ)
+    temp = []
+    for r in pList:
+        c = obj[r,:]
+        c = c[:,r]
+        if(np.abs(np.sum(c*np.triu(np.ones((n,n)))) - kstar)<TOL):
+            temp.append(r)
+        # testing
+        print(r)
+
+    pList = temp
+    for p in pList:
+        print(p)
+###############################################
+###             hillR_LP                    ###
+###############################################
+#   Computes Hillside Rankability Measure.
+###############################################
+#def hillR_LP(a):
+#    """Computes Hillside Rankability Measure by solving LP using Pulp."""
+#    # build c matrix from data matrix a 
+#    n = len(a)
+#    c = np.zeros((n,n))
+#    for i in range(n):
+#        for j in range(n):
+#            c[i,j] = np.count_nonzero((a[:,j]<a[:,i]).astype(int)) + np.count_nonzero((a[i,:]<a[j,:]).astype(int))
+#    print(c)
+#    # hillside rankability pulp class
+#    hillLP= pulp.LpProblem("Hillside LP",pulp.LpMinimize)
+#    # decision variables
+#    x = [[pulp.LpVariable("x{0}_{1}".format(i,j),lowBound=0,upBound=1,cat="Continuous") for j in range(n)] for i in range(n)]
+#    # objective function
+#    hillLP += np.sum(c*x)
+#    # antisymmetry constraint
+#    for i in range(n):
+#        for j in range(i+1,n):
+#                hillLP += x[i][j] + x[j][i] == 1
+#    # transitivity constraint
+#    for i in range(n):
+#        for j in range(n):
+#            for k in range(n):
+#                if(j!=i and k!=j and k!=i):
+#                    hillLP += x[i][j] + x[j][k] + x[k][i] <= 2
+#    hillLP.writeLP('hillLP.lp')
+#    quit()
+#    #print(hillLP)
+#    # solve problem
+#    hillLP.solve()
+#    print("Status:", pulp.LpStatus[hillLP.status])
+#    # optimal k value
+#    kstar = pulp.value(hillLP.objective)
+#    if(kstar==None):
+#        return 0.
+#    # worst k value
+#    x = np.zeros((n,n))
+#    for var in hillLP.variables():
+#        ind = var.name.find('_')
+#        x[int(var.name[1:ind]),int(var.name[ind+1:])] = var.varValue
+#    print(kstar)
+#    print(x)
+#    quit()
+#    perm = np.sum(x,axis=1).argsort() # ascending order (worst ranking)
+#    permC = c[perm,:]
+#    permC = permC[:,perm]
+#    kworst = np.sum(permC*np.triu(np.ones((n,n))))
+#    # test
+#    perm = np.flip(perm)
+#    permC = c[perm,:]
+#    permC = permC[:,perm]
+#    # print kstar and kworst
+#    print(kstar)
+#    print(kworst)
+#    # call hillR_Pset
+#    #hillR_Pset(x,kstar)
+#    # return rankability
+#    if(kstar<TOL and kworst<TOL):
+#        return 0.
+#    else:
+#        return (kworst-kstar)/(kworst+kstar)
 ###############################################
 ###             hillR_Pset                  ###
 ###############################################
 #   Computes Hillside Rankability P set.
 ###############################################
-def hillR_Pset(x,kstar):
-    """Computes Hillside Rankability P set."""
-    perm = np.sum(x,axis=1).argsort()[::-1]
-    permX = x[perm,:]
-    permX = permX[:,perm]
-    print(permX)
+#def hillR_Pset(x,kstar):
+#    """Computes Hillside Rankability P set."""
+#    perm = np.sum(x,axis=1).argsort()[::-1]
+#    permX = x[perm,:]
+#    permX = permX[:,perm]
+#    print(permX)
         
 ###############################################
 ###             hillR_Deprecated            ###
