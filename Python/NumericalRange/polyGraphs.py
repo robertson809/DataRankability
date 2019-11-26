@@ -186,7 +186,7 @@ def polyGraphs(n):
 #   test polygonal graph methods
 ###############################################
 def main():
-    polyGraphs(5)
+    polyGraphs(4)
 
 if __name__ == '__main__':
     main()
