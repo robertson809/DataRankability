@@ -1,0 +1,4 @@
+# to finish my proof to show that the eigenvalues are real, take the matrix in frobenius
+# normal form, and then look at it's imploding k complete graph sections and then its
+# pointing to everything else section. One you know the form of, the other is just a upper triangularmatrix so
+# you know the eignvalues are k because the diangonal lines are k
