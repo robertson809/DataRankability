@@ -172,47 +172,6 @@ def is_polygon(f, l):
     return True
 
 
-# def allQNR(n, r_graph_num=-1, disp=False):
-#     """
-#     Finds and prints ALL the restricted numerical ranges of graphs on n vertices. Does not consider uniqueness
-#     around isomorphism
-#     :param n: the number of vertices
-#     :param r_graph_num: potential to specify a graph or list of graphs rather than all graphs, default -1
-#                         prints all graphs
-#     :param disp: the option to display pictures of the graphs generated
-#     :return:
-#     """
-#     adj = []
-#     # produces a list of flattened matrices with 1,0 entries
-#     for i in itertools.product([0, 1], repeat=n * n):
-#         a = np.reshape(np.array(i), (n, n))  # don't give a shit if this is unique or not
-#         if np.trace(a) == 0:
-#             adj.append(a)
-#
-#     if r_graph_num != -1:  # turn adj into a singleton or shortened list
-#         if type(r_graph_num) == int:
-#             g = adj[r_graph_num]
-#             adj = [g]
-#         if type(r_graph_num) == list:
-#             adj = [adj[num] for num in r_graph_num]
-#
-#     graph_num = 0
-#     for a in adj:
-#         x = np.array([np.sum(a[i, :]) for i in range(n)])
-#         l = np.diag(x) - a
-#         if disp:
-#             if r_graph_num == -1:
-#                 plt.title('Graph {}'.format(graph_num))
-#             elif type(r_graph_num) == int:
-#                 plt.title('Graph {}'.format(r_graph_num))
-#             elif type(r_graph_num) == list:
-#                 plt.title('Graph {}'.format(r_graph_num[graph_num]))
-#             g = nx.DiGraph(a)
-#             nx.draw(g, with_labels=True, ax=plt.subplot(121))
-#         graph_num += 1
-#         qnr(l, graph_num, disp)
-
-
 def all_qnr(n, r_graph_num=-1, disp=True, check_iso=True):
     """
     Finds and prints ALL the restricted numerical ranges of graphs on n vertices. Does not consider uniqueness
@@ -227,7 +186,7 @@ def all_qnr(n, r_graph_num=-1, disp=True, check_iso=True):
     # find all isomorphically unique adjacency
     for i in itertools.product([0, 1], repeat=n * n):
         a = np.reshape(np.array(i), (n, n))
-        if (np.trace(a) == 0):
+        if np.trace(a) == 0:
             perm = unique_perm(a, n)
             if not check_iso:
                 adj.append(a)
@@ -249,8 +208,8 @@ def all_qnr(n, r_graph_num=-1, disp=True, check_iso=True):
     for a in adj:
         x = np.array([np.sum(a[i, :]) for i in range(n)])
         l = np.diag(x) - a
-        print("******** Graph Laplacian #{} ********".format(graph_num))
-        print(l)
+        # print("******** Graph Laplacian #{} ********".format(graph_num))
+        # print(l)
         g = nx.DiGraph(a)
         nx.draw(g, with_labels=True, ax=plt.subplot(121))
         if r_graph_num == -1:
@@ -289,7 +248,8 @@ lines = [21]
 three_IS = [0, 6, 13, 15]
 four_IS = [0, 76, 176, 213, 217]
 
-all_qnr(4, r_graph_num=82, disp=True)
+
+all_qnr(4, disp=False, check_iso=False)
 print('the singletons are at', singleton_index_list)
 print('the lines are at', line_index_list)
 print('the polygons are at', poly_index_list)
