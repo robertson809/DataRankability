@@ -71,7 +71,8 @@ def checkHull(convHull,x,y):
         else:
             a = np.zeros((2,2))
             a[:,0] = a0; a[:,1] = a1
-            res = res or (np.linalg.matrix_rank(a,tol=tol)<2)
+            s = np.linalg.svd(a,compute_uv=False)
+            res = res or (s[1]<tol*s[0])
         r0 = r1
     return res
         
@@ -134,10 +135,11 @@ def qnr(l):
 ###############################################
 ###             Plot Q Numerical Range      ###
 ###############################################
-def pltQNR(l):
+def pltQNR(l,graph_num):
     f,e = qnr(l)
     plt.plot(np.real(f),np.imag(f))
     plt.plot(np.real(e),np.imag(e),'r*')
+    plt.title("Graph Number %d"%graph_num)
     plt.show()
     
 ###############################################
@@ -158,6 +160,7 @@ def unique_perm(a,n):
 ###             Poly Graphs                 ###
 ###############################################
 def polyGraphs(n):
+    mfile = open('matrices/adj'+str(n)+'.txt','w+')
     adj = []
     count = 0
     for i in itertools.product([0, 1], repeat = n*n):
@@ -174,11 +177,35 @@ def polyGraphs(n):
                     adj.append(a)
                     count = count + 1
                     print(count)
- 
     for a in adj:
-        x = np.array([np.sum(a[i,:]) for i in range(n)])
-        l = np.diag(x) - a
-        pltQNR(l)
+        for i in range(n):
+            for j in range(n-1):
+                mfile.write("%d "%a[i,j])
+            mfile.write("%d\n"%a[i,n-1])
+        mfile.write("\n")
+    mfile.close()
+    
+###############################################
+###             display Poly Graphs         ###
+###############################################
+def dispPolyGraphs(n):
+    mfile = open('matrices/adj'+str(n)+'.txt')
+    lineList = mfile.readlines()
+    a = np.zeros((n,n))
+    i = 0
+    graph_num = 1
+    for row in lineList:
+        row = row.split(" ")
+        if(len(row)<n):
+            x = np.array([np.sum(a[i,:]) for i in range(n)])
+            l = np.diag(x) - a
+            pltQNR(l,graph_num)
+            a = np.zeros((n,n))
+            i = 0
+            graph_num = graph_num + 1
+        else:
+            a[i,:] = [eval(row[j]) for j in range(n)]
+            i = i + 1
 
 ###############################################
 ###             main                        ###
@@ -186,7 +213,8 @@ def polyGraphs(n):
 #   test polygonal graph methods
 ###############################################
 def main():
-    polyGraphs(4)
+    #polyGraphs(5)
+    dispPolyGraphs(5)
 
 if __name__ == '__main__':
     main()
