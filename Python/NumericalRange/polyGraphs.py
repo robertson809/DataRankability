@@ -206,7 +206,7 @@ def dispPolyGraphs(n):
             l = np.diag(x) - a
             plt.subplot(122)
             pltQNR(l)
-            plt.savefig("figures/polyGraph%d.png"%graph_num)
+            plt.savefig("polyGraph%d/polyGraph%d.png"%(n,graph_num))
             plt.clf()
             a = np.zeros((n,n))
             i = 0
@@ -222,6 +222,8 @@ def dispPolyGraphs(n):
 ###############################################
 def main():
     #polyGraphs(5)
+    dispPolyGraphs(3)
+    dispPolyGraphs(4)
     dispPolyGraphs(5)
 
 if __name__ == '__main__':
