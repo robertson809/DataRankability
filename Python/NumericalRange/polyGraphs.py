@@ -10,7 +10,9 @@ from math import pi as pi
 from matplotlib import pyplot as plt
 
 EPS = np.finfo(float).eps
-
+singleton_list = []
+line_list = []
+polygon_list = []
 ###############################################
 ###             Convex Hull                 ###
 ###############################################
@@ -139,6 +141,22 @@ def pltQNR(l):
     plt.plot(np.real(f),np.imag(f))
     plt.plot(np.real(e),np.imag(e),'r*')
     plt.show()
+
+
+def is_singleton(f):
+    """
+    checks to see if the shape described by the points in the array
+    are really all the same point
+    """
+    return np.var(f) < 0.001
+
+
+def is_line(f):
+    """
+    checks if the shape described by the points is a real line
+    """
+    return np.sum(np.absolute(np.imag(f))) < .001
+
     
 ###############################################
 ###             Unique Permutation          ###
@@ -157,28 +175,44 @@ def unique_perm(a,n):
 ###############################################
 ###             Poly Graphs                 ###
 ###############################################
-def polyGraphs(n):
+def polyGraphs(n, r_graph_num=-1, disp = False):
     adj = []
     count = 0
+    graph_id = 0
     for i in itertools.product([0, 1], repeat = n*n):
+        graph_id += 1
         a = np.reshape(np.array(i),(n,n))
-        if(np.trace(a)==0):
+        if np.trace(a)==0:
             x = np.array([np.sum(a[i,:]) for i in range(n)])
             d = np.diag(x)
             l = d - a
             f,e = qnr(l)
-            if(isPolygon(f,e)):
-                perm = unique_perm(a,n)
+            if is_singleton(f):
+                singleton_list.append(graph_id)
+            elif is_line(f):
+                line_list.append(graph_id)
+            elif isPolygon(f,e):
+                perm = unique_perm(a, n)
                 add = not any(np.array_equal(p,x) for p in perm for x in adj)
-                if(add):
+                if add:
                     adj.append(a)
+                    polygon_list.append(graph_id)
                     count = count + 1
                     print(count)
+                    if disp:
+                        lt.subplot(122)
+                        plt.plot(np.real(f), np.imag(f))
+                        plt.plot(np.real(e), np.imag(e), 'r*')
+                        #  plt.gca().set_aspect('equal', adjustable='box')
+                        plt.show()
  
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
         l = np.diag(x) - a
         pltQNR(l)
+    print('the singletons are at', singleton_list)
+    print('the lines are at', line_list)
+    print('the polygons are at', polygon_list)
 
 ###############################################
 ###             main                        ###
