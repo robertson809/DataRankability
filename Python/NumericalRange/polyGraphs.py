@@ -175,15 +175,15 @@ def unique_perm(a,n):
 ###############################################
 ###             Poly Graphs                 ###
 ###############################################
-def polyGraphs(n, r_graph_num=-1, disp = False):
+def polyGraphs(n, graph_list=[-1], disp = False):
     adj = []
     count = 0
     graph_id = 0
     for i in itertools.product([0, 1], repeat = n*n):
         graph_id += 1
-        a = np.reshape(np.array(i),(n,n))
-        if np.trace(a)==0:
-            x = np.array([np.sum(a[i,:]) for i in range(n)])
+        a = np.reshape(np.array(i), (n, n))
+        if np.trace(a) == 0 and ((graph_id in graph_list) or -1 in graph_list):
+            x = np.array([np.sum(a[i, :]) for i in range(n)])
             d = np.diag(x)
             l = d - a
             f,e = qnr(l)
@@ -191,14 +191,14 @@ def polyGraphs(n, r_graph_num=-1, disp = False):
                 singleton_list.append(graph_id)
             elif is_line(f):
                 line_list.append(graph_id)
-            elif isPolygon(f,e):
+            elif isPolygon(f, e):
                 perm = unique_perm(a, n)
-                add = not any(np.array_equal(p,x) for p in perm for x in adj)
+                add = not any(np.array_equal(p, x) for p in perm for x in adj)
                 if add:
                     adj.append(a)
                     polygon_list.append(graph_id)
                     count = count + 1
-                    print(count)
+                    print('polygon {} is graph_id {}'.format(count, graph_id))
                     if disp:
                         lt.subplot(122)
                         plt.plot(np.real(f), np.imag(f))
@@ -221,6 +221,19 @@ def polyGraphs(n, r_graph_num=-1, disp = False):
 ###############################################
 def main():
     polyGraphs(4)
+    #polyGraphs(4, [323, 2507, 4741, 6357, 14687, 14791])
 
 if __name__ == '__main__':
     main()
+
+#singleton_list = [1, 2185, 4369, 6553, 8707, 10891, 13075, 15259, 16453, 18637, 20821, 23005, 25159, 27343, 29527, 31711]
+#line_list = [15, 19, 205, 209, 223, 261, 279, 469, 577, 591, 595, 837, 855, 2203, 2445, 2449, 2463, 2571, 2761,
+# 2779, 2817, 2831, 2835, 3021, 3025, 3039, 4105, 4123, 4313, 4365, 4383, 4573, 4681, 4699, 4941, 4945, 4959,
+# 6921, 6939, 7129, 8321, 8335, 8339, 8581, 8599, 8897, 8911, 8915, 8967, 9157, 9175, 11137, 11151, 11155,
+# 12425, 12443, 12685, 12689, 12703, 12811, 13001, 13019, 13057, 13071, 13261, 13265, 13279, 15241, 16471,
+# 18433, 18447, 18451, 18641, 18655, 18693, 18711, 18901, 19009, 19023, 19027, 19269, 19287, 20557, 20561,
+# 20575, 22537, 22555, 22745, 22797, 22801, 22815, 23113, 23131, 23373, 23377, 23391, 24583, 24773, 24791,
+# 26753, 26767, 26771, 27013, 27031, 27139, 27329, 27347, 27399, 27589, 27607, 28673, 28687, 28691, 28877,
+# 28881, 28895, 28933, 28951, 29141, 29249, 29263, 29267, 29509, 30857, 30875, 31117, 31121, 31135, 31243,
+# 31433, 31451, 31489, 31503, 31507, 31693, 31697]
+#poly_list = [323, 2507, 4741, 6357, 14687, 14791]
