@@ -6,6 +6,9 @@
 # Date: 11/24/2019
 import itertools
 import numpy as np
+import networkx as nx
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 from math import pi as pi
 from matplotlib import pyplot as plt
 
@@ -135,12 +138,11 @@ def qnr(l):
 ###############################################
 ###             Plot Q Numerical Range      ###
 ###############################################
-def pltQNR(l,graph_num):
+def pltQNR(l):
     f,e = qnr(l)
     plt.plot(np.real(f),np.imag(f))
     plt.plot(np.real(e),np.imag(e),'r*')
-    plt.title("Graph Number %d"%graph_num)
-    plt.show()
+   # plt.show()
     
 ###############################################
 ###             Unique Permutation          ###
@@ -197,9 +199,15 @@ def dispPolyGraphs(n):
     for row in lineList:
         row = row.split(" ")
         if(len(row)<n):
+            g = nx.DiGraph(a)
+            nx.draw_shell(g,with_labels=True, ax = plt.subplot(121))
+            plt.title("Graph Number %d"%graph_num)
             x = np.array([np.sum(a[i,:]) for i in range(n)])
             l = np.diag(x) - a
-            pltQNR(l,graph_num)
+            plt.subplot(122)
+            pltQNR(l)
+            plt.savefig("figures/polyGraph%d.png"%graph_num)
+            plt.clf()
             a = np.zeros((n,n))
             i = 0
             graph_num = graph_num + 1
