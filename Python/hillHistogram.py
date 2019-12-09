@@ -32,15 +32,9 @@ def hillR(a):
     # minimum and maximum number of hillside violations
     kstar=np.amin(fitness);
     kworst=np.amax(fitness);
-    # graph
-    #g = nx.DiGraph(a)
-    #nx.draw(g,with_labels=True, ax = plt.subplot(121))
-    # histogram
-    #plt.subplot(122)
+    # histogram plot
     num_bins = (kworst-kstar+1).astype(int);
-    values, bins, patches = plt.hist(fitness,bins=num_bins,histtype='bar',ec='black',color='blue',alpha=0.5)
-    area = sum(values)
-    print("area = %.2f" % area)
+    values, bins, patches = plt.hist(fitness,bins=num_bins,histtype='bar',ec='black',alpha=0.5)
     # number of rankings with kstar violations
     p = np.sum(np.abs(fitness-kstar)<np.finfo(float).eps)
     # return rankability measures
@@ -51,7 +45,7 @@ def hillR(a):
 #   main method tests rankability measures on big east data
 ###############################################
 def main():
-    for year in range(1995,2013):
+    for year in [1998,2001,2007]:
         # open game file
         f = open('../data_files/CFB/Big East/'+str(year)+'games.txt');
         # read lines
@@ -91,9 +85,10 @@ def main():
         f.close()
         # create hillside Histogram
         k,p,r = hillR(d)
-        plt.title("Big East %d\n k = %d, p = %d, r = %.4f" % (year,k,p,r))
-        plt.savefig("figures/hillHist_BigEast%d.png"%year,dpi=400)
-        plt.clf()
-        plt.close()
+    # save histogram
+    plt.title("Big East 1998, 2001, and 2007")
+    plt.savefig("figures/hillHist_BigEast1998-2001-2007.png",dpi=400)
+    plt.clf()
+    plt.close()
 if __name__ == '__main__':
     main()

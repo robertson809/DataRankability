@@ -221,10 +221,10 @@ def dispPolyGraphs(n):
 #   test polygonal graph methods
 ###############################################
 def main():
-    #polyGraphs(5)
-    dispPolyGraphs(3)
-    dispPolyGraphs(4)
-    dispPolyGraphs(5)
+    polyGraphs(6)
+    #dispPolyGraphs(3)
+    #dispPolyGraphs(4)
+    #dispPolyGraphs(5)
 
 if __name__ == '__main__':
     main()
