@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 import networkx as nx
 import itertools
 from math import pi as pi
+import sys
 from operator import itemgetter
 ##Global variables are realllly bad practice but otherwise
 ##I'd have to pass things all over the place
@@ -43,12 +44,12 @@ def nr(a, graph_num):
         plt.plot(np.real(f),np.imag(f))
         plt.plot(np.real(e),np.imag(e),'r*')
         #plt.gca().set_aspect('equal', adjustable='box')
-        plt.show()
+
         
 ###############################################
 ###             Q Numerical Range           ###
 ###############################################
-def qnr(l, graph_num):
+def qnr(l, graph_num, title):
     """Plots q numerical range of graph Laplacian."""
     m, n = l.shape
     if(m!=n):
@@ -59,10 +60,16 @@ def qnr(l, graph_num):
         q[0:j+1,j] = 1
         q[j+1,j] = -(j+1)
         q[:,j] = q[:,j]/np.linalg.norm(q[:,j])
-    m = np.dot(np.transpose(q),np.dot(l,q))
-    #print("******** Q Matrix ********")
-    #print(m)
+    m = np.dot(np.transpose(q), np.dot(l,q))
+    print('normal size off by', np.linalg.norm(m.transpose() @ m - m
+                   @ m.transpose(), 'fro'))
+    if abs(np.linalg.norm(m.transpose() @ m - m @ m.transpose(), 'fro')) <= \
+            np.linalg.norm(m) * sys.float_info.epsilon:
+        title = title + ' [Q(N)] '
+    print("******** Q Matrix {} ********".format(graph_num))
+    print(m)
     nr(m, graph_num)
+    return title
 
 ###############################################
 ###             Unique Permutation          ###
@@ -77,6 +84,7 @@ def unique_perm(a,n):
         if(add):
             perm.append(b)
     return perm
+
 
 def is_singleton(f):
     """
@@ -117,18 +125,25 @@ def allQNR(n, r_graph_num = -1):
     for a in adj:
         x = np.array([np.sum(a[i,:]) for i in range(n)])
         l = np.diag(x) - a
-        print("******** Graph Laplacian ********")
+        print("******** Graph Laplacian {} ********".format(graph_num))
         print(l)
+        title = ''
+        print('normal size is off by {}'.format(np.linalg.norm(l.transpose() @ l - l
+                               @ l.transpose(), 'fro')))
+        if np.linalg.norm(l.transpose() @ l - l
+                               @ l.transpose(), 'fro') == 0:
+            title = title + ' [L(N)] '
         g = nx.DiGraph(a)
-        nx.draw(g,with_labels=True, ax = plt.subplot(121))
+        title = qnr(l, graph_num, title)
+        nx.draw(g, with_labels=True, ax = plt.subplot(121))
         if r_graph_num == -1:
-            plt.title('Graph {}'.format(graph_num))
+            plt.title(title + 'Graph {}'.format(graph_num))
         elif type(r_graph_num) == int:
             plt.title('Graph {}'.format(r_graph_num))
         elif type(r_graph_num) == list:
             plt.title('Graph {}'.format(r_graph_num[graph_num]))
-        qnr(l, graph_num)
-        #plt.show()
+
+        plt.show()
         #print('showing the numerical range of just L')
         #nr(l, graph_num)
         graph_num += 1 
@@ -164,8 +179,25 @@ four_IS = [0, 76, 176, 213, 217]
 
 #allQNR(4, r_graph_num= 76)
 # allQNR(4, r_graph_num = four_IS)
-allQNR(4)
+allQNR(3)
+alex_graph = [[2, -1, 0,0,-1],
+              [0,1,-1,0,0],
+              [0,0,1,-1,0],
+              [0,0,0,1,-1],
+              [-1,0,0,0,1]]
+
+test_graph = np.array([[1,-1,0,0,0],
+              [0,1,-1,0,0],
+              [-1,0,1,0,0],
+              [0,0,0,1,-1],
+              [0,0,0,-1,1]])
+#qnr(test_graph, 1)
+#k = test_graph.transpose() @ test_graph - test_graph @ test_graph.transpose()
+#print(k, np.linalg.norm(k, 'fro'))
 print('the singletons are at', singleton_index_list)
-#impStar(4)
+
+#shouldn't be possible that graph
+# 3 on 3 vertices has normal laplacian but not normal 1
+
 
 
