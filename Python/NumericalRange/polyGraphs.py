@@ -86,6 +86,26 @@ def checkHull(convHull, x, y):
         r0 = r1
     return res
 
+###############################################
+###             Is Singleton                ###
+###############################################
+def is_singleton(f):
+    """
+    checks to see if the shape described by the points in the array
+    are really all the same point
+    """
+    return np.var(f) < 0.001
+
+
+###############################################
+###             Is Singleton                ###
+###############################################
+def is_line(f):
+    """
+    checks if the shape described by the points is a real line
+    """
+    return np.sum(np.absolute(np.imag(f))) < .0000001
+
 
 ###############################################
 ###             Is Polygon                  ###
@@ -117,10 +137,27 @@ def nr(a):
         w = w[ind]
         v = v[:, ind]
         v = v[:, n - 1]
-        f.append(np.dot(np.conjugate(v), np.dot(a, v)) / np.dot(np.conjugate(v), v))
+        val = np.dot(np.conjugate(v), np.dot(a, v)) / np.dot(np.conjugate(v), v)
+
+        # kill the roundoff
+        if 0 < abs(val.real) < EPS * 10:
+            val = val - val.real
+        if 0 < abs(val.imag) < EPS * 10:
+            val = val - val.imag * 1j
+
+        f.append(val)
     f.append(f[0])
     f = np.array(f)
-    return f, np.linalg.eigvals(a)
+    evals = np.around(np.linalg.eigvals(a), decimals=13)
+    # for eval in evals:
+    #     print(type(eval))
+    #     if 0 < abs(eval.real) < EPS * 100:
+    #         eval = eval - eval.real
+    #         eval = 0 + 0j + eval.imag
+    #     if 0 < abs(eval.imag) < EPS * 100:
+    #         eval = eval - eval.imag * 1j
+    #         eval = eval.real + 0j
+    return f, evals
 
 
 ###############################################
@@ -148,12 +185,20 @@ def qnr(l):
     a = np.dot(np.transpose(q), np.dot(l, q))
     print("******** Q Matrix {} ********".format(graph_num))
     print(a)
+    # plot Q matrix
+    plt.subplot(224)
+    plt.matshow(a, fignum=False)
+    for i in range(n):
+        for j in range(n):
+            c = l[j, i]
+            plt.text(i, j, str(c), va='center', ha='center', color='white')
+
     global title
     if abs(np.linalg.norm(a.transpose() @ a - a @ a.transpose(), 'fro')) <= \
-            np.linalg.norm(a, 'fro') * sys.float_info.epsilon * 10:
-        title = title + ' [Q(N)] '
+            np.linalg.norm(a, 'fro') * sys.float_info.epsilon * 100:
+        title = title + ' N_Q '
     else:
-        print('normal size off by', np.linalg.norm(a.transpose() @ a - a
+        print('Q normal measure off by', np.linalg.norm(a.transpose() @ a - a
                                                    @ a.transpose(), 'fro'))
         print('and tol was {}'.format(np.linalg.norm(a, 'fro') * 10 * \
                                       sys.float_info.epsilon))
@@ -165,11 +210,10 @@ def qnr(l):
 ###############################################
 def pltQNR(l):
     f, e = qnr(l)
+    plt.subplot(223)
     plt.plot(np.real(f), np.imag(f))
     plt.plot(np.real(e), np.imag(e), 'r*')
-    plt.subplot(121)
-    plt.title(title + "Graph Number %d" % graph_num)
-    plt.show()
+    return f, e
 
 
 ############################################################
@@ -181,15 +225,11 @@ def unique_perm(a):
     for i in itertools.permutations(ind):  # all the permutations of [1...n]
         b = a[i, :]
         b = b[:, i]
-        add = not any(np.array_equal(b, x) for x in perm)  #finds all the different
-        #permutations of b, in a really inefficent way
+        add = not any(np.array_equal(b, x) for x in perm)  # finds all the different
+        # permutations of b, in a really inefficent way
         if (add):
             perm.append(b)
     return perm
-
-
-def unique_perm_b(a, n):
-    return None
 
 
 ##############################################
@@ -214,7 +254,7 @@ def polyGraphs(n):
                 add1 = not any(nx.is_isomorphic(g, y) for y in adj)
                 # if add != add1:
                 #     print('well fuck')
-                assert not(add != add1), 'ya fucked up' ##logical not xor
+                assert not (add != add1), 'ya fucked up'  ##logical not xor
                 ## perm has all the equiv matrix permutations of a. If any of them are already
                 ## in adj, the unique set, then don't add a.
                 ## we can improve this by checking for isomorphisms by using the networkx method,
@@ -242,22 +282,28 @@ def polyGraphs(n):
 
 
 ###############################################
-###             display Poly Graphs         ###
+###     display Poly Graphs from non-isomorphic  ###
 ###############################################
 def dispPolyGraphs(n):
-    mfile = open('matrices/adj' + str(n) + '.txt')
+    mfile = open('matrices/adj' + str(n) + '_pt1_cleaned.txt')
+    # mfile = open('matrices/adj' + str(n)+ '.txt')
     lineList = mfile.readlines()
     a = np.zeros((n, n))
     i = 0
-
+    polycount = 0
+    linecount = 0
+    singleton_count = 0
     for row in lineList:
+        # if polycount > 300:
+        #     print("we found three hundred. Probably don't want to " \
+        #           "take up anymore space")
         row = row.split(" ")
-        if (len(row) < n):
+        if (len(row) < n or row[0] == 'G'):
             global graph_num
             global title
             title = ""
             g = nx.DiGraph(a)
-            nx.draw_shell(g, with_labels=True, ax=plt.subplot(121))
+            nx.draw_shell(g, with_labels=True, ax=plt.subplot(221))
 
             x = np.array([np.sum(a[i, :]) for i in range(n)])
             l = np.diag(x) - a
@@ -265,10 +311,31 @@ def dispPolyGraphs(n):
             print(l)
             if np.linalg.norm(l.transpose() @ l - l
                               @ l.transpose(), 'fro') == 0:
-                title = title + ' [L(N)] '
-            plt.subplot(122)
-            pltQNR(l)
-            plt.savefig("polyGraph%d/polyGraph%d.png" % (n, graph_num))
+                title = title + ' N_L '
+            else:
+                print('L normal measure off by', np.linalg.norm(l.transpose() @ l - l
+                                                             @ l.transpose(), 'fro'))
+                print('and tol was 0')
+            plt.title(title + "Graph Number %d" % graph_num)
+            f, e = pltQNR(l)
+            plt.subplot(222)
+            plt.matshow(l, fignum=False, cmap='winter')
+            # write the numbers in the entries
+            for k in range(n):
+                for j in range(n):
+                    c = l[j, k]
+                    plt.text(k, j, str(c), va='center', ha='center', color='white')
+            fig = plt.gcf()
+            if is_singleton(f):
+                fig.savefig("singletonGraph%d/singletonGraph%d.png" % (n, graph_num))
+                singleton_count += 1
+            elif is_line(f):
+                fig.savefig("lineGraph%d/lineGraph%d.png" % (n, graph_num))
+                linecount += 1
+            elif isPolygon(f, e):
+                polycount += 1
+                # plt.show()
+                fig.savefig("polyGraph%d/polyGraph%d.png" % (n, graph_num))
             plt.clf()
             a = np.zeros((n, n))
             i = 0
@@ -276,6 +343,7 @@ def dispPolyGraphs(n):
         else:
             a[i, :] = [eval(row[j]) for j in range(n)]
             i = i + 1
+    return polycount
 
 
 ###############################################
@@ -285,8 +353,9 @@ def dispPolyGraphs(n):
 ###############################################
 
 def main():
-    polyGraphs(3)
-    # dispPolyGraphs(3)
+    # polyGraphs(3)
+    num_poly_6 = dispPolyGraphs(6)
+    print(num_poly_6, 'true polygons')
     # dispPolyGraphs(4)
     # dispPolyGraphs(5)
 
