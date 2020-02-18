@@ -8,6 +8,7 @@ import itertools
 import numpy as np
 import networkx as nx
 import warnings
+import time
 
 warnings.filterwarnings("ignore", category=UserWarning)
 from math import pi as pi
@@ -17,6 +18,7 @@ import sys
 EPS = np.finfo(float).eps
 graph_num = 1
 title = ""
+verbose = False
 
 
 ###############################################
@@ -85,6 +87,7 @@ def checkHull(convHull, x, y):
             res = res or (s[1] < tol * s[0])
         r0 = r1
     return res
+
 
 ###############################################
 ###             Is Singleton                ###
@@ -183,11 +186,12 @@ def qnr(l):
         q[j + 1, j] = -(j + 1)
         q[:, j] = q[:, j] / np.linalg.norm(q[:, j])
     a = np.dot(np.transpose(q), np.dot(l, q))
-    print("******** Q Matrix {} ********".format(graph_num))
-    print(a)
+    if verbose:
+        print("******** Q Matrix {} ********".format(graph_num))
+        print(a)
     # plot Q matrix
     plt.subplot(224)
-    plt.matshow(a, fignum=False)
+    plt.matshow(a, fignum=False, cmap='winter')
     for i in range(n):
         for j in range(n):
             c = l[j, i]
@@ -197,9 +201,9 @@ def qnr(l):
     if abs(np.linalg.norm(a.transpose() @ a - a @ a.transpose(), 'fro')) <= \
             np.linalg.norm(a, 'fro') * sys.float_info.epsilon * 100:
         title = title + ' N_Q '
-    else:
+    elif verbose:
         print('Q normal measure off by', np.linalg.norm(a.transpose() @ a - a
-                                                   @ a.transpose(), 'fro'))
+                                                        @ a.transpose(), 'fro'))
         print('and tol was {}'.format(np.linalg.norm(a, 'fro') * 10 * \
                                       sys.float_info.epsilon))
     return nr(a)
@@ -284,14 +288,15 @@ def polyGraphs(n):
 ###############################################
 ###     display Poly Graphs from non-isomorphic  ###
 ###############################################
-def dispPolyGraphs(n):
-    mfile = open('matrices/adj' + str(n) + '_pt1_cleaned.txt')
+def dispPolyGraphs(n, pt):
+    start_time = time.time()
+    mfile = open('matrices/adj' + str(n) + '_pt' + str(pt) + '_cleaned.txt')
     # mfile = open('matrices/adj' + str(n)+ '.txt')
     lineList = mfile.readlines()
     a = np.zeros((n, n))
     i = 0
-    polycount = 0
-    linecount = 0
+    poly_count = 0
+    line_count = 0
     singleton_count = 0
     for row in lineList:
         # if polycount > 300:
@@ -307,17 +312,19 @@ def dispPolyGraphs(n):
 
             x = np.array([np.sum(a[i, :]) for i in range(n)])
             l = np.diag(x) - a
-            print("******** Graph Laplacian {} ********".format(graph_num))
-            print(l)
+            if verbose:
+                print("******** Graph Laplacian {} ********".format(graph_num))
+                print(l)
             if np.linalg.norm(l.transpose() @ l - l
                               @ l.transpose(), 'fro') == 0:
                 title = title + ' N_L '
-            else:
+            elif verbose:
                 print('L normal measure off by', np.linalg.norm(l.transpose() @ l - l
-                                                             @ l.transpose(), 'fro'))
+                                                                @ l.transpose(), 'fro'))
                 print('and tol was 0')
-            plt.title(title + "Graph Number %d" % graph_num)
             f, e = pltQNR(l)
+            plt.subplot(221)
+            plt.title(title + "Graph Number %d.%d" % (pt, graph_num))
             plt.subplot(222)
             plt.matshow(l, fignum=False, cmap='winter')
             # write the numbers in the entries
@@ -327,23 +334,30 @@ def dispPolyGraphs(n):
                     plt.text(k, j, str(c), va='center', ha='center', color='white')
             fig = plt.gcf()
             if is_singleton(f):
-                fig.savefig("singletonGraph%d/singletonGraph%d.png" % (n, graph_num))
+                fig.savefig("singletonGraph%d/singletonGraph%d_%d.png" % (n, pt, graph_num), dpi=400)
                 singleton_count += 1
             elif is_line(f):
-                fig.savefig("lineGraph%d/lineGraph%d.png" % (n, graph_num))
-                linecount += 1
+                fig.savefig("lineGraph%d/lineGraph%d_%d.png" % (n, pt, graph_num), dpi=400)
+                line_count += 1
             elif isPolygon(f, e):
-                polycount += 1
+                poly_count += 1
                 # plt.show()
-                fig.savefig("polyGraph%d/polyGraph%d.png" % (n, graph_num))
+                fig.savefig("polyGraph%d/polyGraph%d_%d.png" % (n, pt, graph_num), dpi=400)
             plt.clf()
             a = np.zeros((n, n))
             i = 0
             graph_num = graph_num + 1
+            if graph_num % 1000 == 0:
+                print('Examined graph {}.{}'.format(pt, graph_num))
+                print('We have {} singletons, {} lines, and {} polygons'.format(singleton_count,
+                                                                    line_count, poly_count))
+                print('Total time elapsed ---- %.1f hours' % ((time.time() - start_time) / 3600))
+
+
         else:
             a[i, :] = [eval(row[j]) for j in range(n)]
             i = i + 1
-    return polycount
+    return poly_count
 
 
 ###############################################
@@ -354,7 +368,7 @@ def dispPolyGraphs(n):
 
 def main():
     # polyGraphs(3)
-    num_poly_6 = dispPolyGraphs(6)
+    num_poly_6 = dispPolyGraphs(6, int(sys.argv[1]))
     print(num_poly_6, 'true polygons')
     # dispPolyGraphs(4)
     # dispPolyGraphs(5)
