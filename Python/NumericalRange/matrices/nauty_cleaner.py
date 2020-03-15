@@ -1,6 +1,6 @@
 import sys
-# name = sys.argv[1]
-name = 'adj6_pt4.txt'
+name = sys.argv[1]
+#name = 'adj6_pt4.txt'
 
 infile = open(name)
 outfile = open(name[:-4] + '_cleaned.txt', 'w+')

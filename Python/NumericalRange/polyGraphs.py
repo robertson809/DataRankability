@@ -70,7 +70,7 @@ def convex_hull(points):
 ###             checkHull                   ###
 ###############################################
 def checkHull(convHull, x, y):
-    tol = 10 * EPS
+    tol = 1000 * EPS
     r0 = convHull[-1]
     res = False
     for k in range(len(convHull)):
@@ -190,8 +190,8 @@ def qnr(l):
         print("******** Q Matrix {} ********".format(graph_num))
         print(a)
     # plot Q matrix
-    plt.subplot(224)
-    plt.matshow(a, fignum=False, cmap='winter')
+    # plt.subplot(224)
+    # plt.matshow(a, fignum=False, cmap='winter')
     for i in range(n):
         for j in range(n):
             c = l[j, i]
@@ -214,10 +214,16 @@ def qnr(l):
 ###############################################
 def pltQNR(l):
     f, e = qnr(l)
+    f_l, e_l = nr(l)
     plt.subplot(223)
+    plt.title('NR(Q)')
     plt.plot(np.real(f), np.imag(f))
-    plt.plot(np.real(e), np.imag(e), 'r*')
-    return f, e
+    plt.plot(np.real(e), np.imag(e), 'g*')
+    plt.subplot(224)
+    plt.title('NR(L)')
+    plt.plot(np.real(f_l), np.imag(f_l))
+    plt.plot(np.real(e_l), np.imag(e_l), 'g*')
+    return f, e, f_l, e_l
 
 
 ############################################################
@@ -237,7 +243,9 @@ def unique_perm(a):
 
 
 ##############################################
-###             Poly Graphs                 ###
+###             Poly Graphs
+#
+# Used to find the polygraphs###
 ###############################################
 def polyGraphs(n):
     mfile = open('matrices/adj' + str(n) + '.txt', 'w+')  # write to this
@@ -250,7 +258,8 @@ def polyGraphs(n):
             x = np.array([np.sum(a[i, :]) for i in range(n)])
             d = np.diag(x)
             l = d - a
-            f, e = qnr(l)  # qnr returns the NR as f and the ev of l as e
+            f, e, f_l, e_l = qnr(l)  # qnr returns the NR as f and the ev of l as e
+
             if (isPolygon(f, e)):
                 g = nx.DiGraph(a)
                 perm = unique_perm(a)  # unique perm returns a whole list of the possible permutations of a
@@ -288,20 +297,24 @@ def polyGraphs(n):
 ###############################################
 ###     display Poly Graphs from non-isomorphic  ###
 ###############################################
-def dispPolyGraphs(n, pt):
+def dispPolyGraphs(n, pt=-1):
     start_time = time.time()
-    mfile = open('matrices/adj' + str(n) + '_pt' + str(pt) + '_cleaned.txt')
-    # mfile = open('matrices/adj' + str(n)+ '.txt')
+    # mfile = open('matrices/adj' + str(n) + '_pt' + str(pt) + '_cleaned.txt')
+    if pt != -1:
+        mfile = open('matrices/directed_adjacency_mats/adj' + str(n) + '_pt' + str(pt)+ '.txt')
+    else:
+        mfile = open('matrices/directed_adjacency_mats/adj' + str(n) + '.txt')
+    # if n == 6:
+    #     mfile = open('matrices/adj6_first100.txt')
+    outfile = open('matrices/poly_adjs/poly_adj' + str(n) + '.txt', 'w+')
     lineList = mfile.readlines()
     a = np.zeros((n, n))
     i = 0
     poly_count = 0
     line_count = 0
     singleton_count = 0
+    poly_adj = []
     for row in lineList:
-        # if polycount > 300:
-        #     print("we found three hundred. Probably don't want to " \
-        #           "take up anymore space")
         row = row.split(" ")
         if (len(row) < n or row[0] == 'G'):
             global graph_num
@@ -322,27 +335,39 @@ def dispPolyGraphs(n, pt):
                 print('L normal measure off by', np.linalg.norm(l.transpose() @ l - l
                                                                 @ l.transpose(), 'fro'))
                 print('and tol was 0')
-            f, e = pltQNR(l)
             plt.subplot(221)
-            plt.title(title + "Graph Number %d.%d" % (pt, graph_num))
+            if pt != -1:
+                plt.title(title + "Graph Number %d.%d" % (pt, graph_num))
+            else:
+                plt.title(title + "Graph Number %d" % graph_num)
             plt.subplot(222)
             plt.matshow(l, fignum=False, cmap='winter')
+
+
             # write the numbers in the entries
+
             for k in range(n):
                 for j in range(n):
                     c = l[j, k]
                     plt.text(k, j, str(c), va='center', ha='center', color='white')
+            f, e = pltQNR(l)
             fig = plt.gcf()
             if is_singleton(f):
-                fig.savefig("singletonGraph%d/singletonGraph%d_%d.png" % (n, pt, graph_num), dpi=400)
+                fig.savefig("%d_all/singletonGraph%d/singletonGraph%d.png" % (n, n, graph_num), dpi=400)
                 singleton_count += 1
+                poly_adj.append(l)
             elif is_line(f):
-                fig.savefig("lineGraph%d/lineGraph%d_%d.png" % (n, pt, graph_num), dpi=400)
+                fig.savefig("%d_all/lineGraph%d/lineGraph%d.png" % (n, n, graph_num), dpi=400)
                 line_count += 1
+                poly_adj.append(l)
             elif isPolygon(f, e):
                 poly_count += 1
+                poly_adj.append(l)
                 # plt.show()
-                fig.savefig("polyGraph%d/polyGraph%d_%d.png" % (n, pt, graph_num), dpi=400)
+                fig.savefig("%d_all/polyGraph%d/polyGraph%d.png" % (n, n, graph_num), dpi=400)
+            else:
+                fig.savefig("%d_all/other/graph%d.png" % (n, graph_num), dpi = 400)
+
             plt.clf()
             a = np.zeros((n, n))
             i = 0
@@ -353,10 +378,16 @@ def dispPolyGraphs(n, pt):
                                                                     line_count, poly_count))
                 print('Total time elapsed ---- %.1f hours' % ((time.time() - start_time) / 3600))
 
-
         else:
             a[i, :] = [eval(row[j]) for j in range(n)]
             i = i + 1
+    for g in poly_adj:
+        for i in range(n):
+            for j in range(n - 1):
+                outfile.write("%d " % g[i, j])
+            outfile.write("%d\n" % g[i, n - 1])
+        outfile.write("\n")
+    outfile.close()
     return poly_count
 
 
@@ -368,9 +399,9 @@ def dispPolyGraphs(n, pt):
 
 def main():
     # polyGraphs(3)
-    num_poly_6 = dispPolyGraphs(6, int(sys.argv[1]))
-    print(num_poly_6, 'true polygons')
-    # dispPolyGraphs(4)
+    # num_poly_6 = dispPolyGraphs(6, int(sys.argv[1]))
+    # print(num_poly_6, 'true polygons')
+    dispPolyGraphs(4)
     # dispPolyGraphs(5)
 
 
